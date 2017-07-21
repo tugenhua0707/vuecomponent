@@ -3,18 +3,19 @@
   <div :class="classes">
     <div :class="[prefixCls + '-selection']" @click="toggleMenu">
       <div class="tb-select2-tag" v-for="(item, index) in selectedMultiple">
-        <span class="tb-select2-tag-text">{{ item.label }}</span><i>x</i>
+        <span class="tb-select2-tag-text">{{ item.label }}</span><i @click.stop="delItem(item.value)">x</i>
       </div>
       <span :class="[prefixCls + '-placeholder']" v-show="showPlaceholder && !filterable">{{ placeholder }}</span>
       <span :class="[prefixCls + '-selected-value']" v-show="!showPlaceholder && !multiple && !filterable">{{ selectedSingle }}</span>
       <input 
         type="text"
         :class="[prefixCls + '-input']"
-        v-show="showPlaceholder && filterable"
+        v-if="filterable"
         ref="input"
+        v-model="query"
         :style="inputStyle"
         @keydown="resetInputLength"
-        :placeholder="placeholder" 
+        :placeholder="showPlaceholder ? placeholder : ''"
       />
       <i class="tb-icon tb-icon-caret-down tb-select2-arrow" v-show="!visible"></i>
       <i class="tb-icon tb-icon-caret-up tb-select2-arrow" v-show="visible"></i>
@@ -24,7 +25,7 @@
         <ul :class="[prefixCls + '-not-found']" v-show="notFound">
           <li>{{ notFoundText }}</li>
         </ul>
-        <ul :class="[prefixCls + '-dropdown-list']">
+        <ul :class="[prefixCls + '-dropdown-list']" v-show="!notFound">
           <slot></slot>
         </ul>
       </div>
@@ -82,8 +83,9 @@
         selectedMultiple: [],  // 保存多选框的   
         notFound: false,       // 没有匹配到
         inputLength: 20,
-        focusIndex: 0, 
-        currentValue: this.value,
+        query: '',             // 查询值
+        focusIndex: 0,
+        currentValue: this.value,       
       }
     },
     computed: {
@@ -128,6 +130,11 @@
         return style;
       },
     },
+    watch: {
+      query(curVal,oldVal) {
+        this.searchMatch(curVal);
+      }
+    },
     mounted () {
       // 监听
       this.$on('on-select-selected', (value) => {
@@ -151,6 +158,7 @@
                 this.currentValue = this.selectedMultiple;
                 // 设置子元素的数据
                 child.selected = true;
+                this.query = '';
               } else {
                 // 删除数组的某一项
                 this.removeItem(curIndex);
@@ -159,8 +167,10 @@
                 child.selected = false;
                 this.currentValue = this.selectedMultiple;
               }
+              if (this.filterable) {
+                this.$refs.input.focus();
+              }
               this.focusIndex = index;
-              this.$refs.input.focus();
               // 对外提供回调 是一个数组对象 参数包括 key 和 value index 
               this.$emit('change', this.selectedMultiple); 
             }
@@ -197,7 +207,9 @@
           this.$children.forEach((child, index) => {
             this.defaultSelectedMultipleValue(child, index);
           });
-          this.$refs.input.focus();
+          if (this.filterable) {
+            this.$refs.input.focus();
+          }
           // 对外提供回调 是一个数组对象 参数包括 key 和 value index 
           this.$emit('change', this.selectedMultiple); 
         }
@@ -302,6 +314,7 @@
         return this.selectedMultiple.splice(index, 1);
       },
       checkIsInSelect(node) {
+
         if (!node) {
           return false;
         } else if (node.className && node.className.indexOf('tb-select2') !== -1) {
@@ -310,7 +323,7 @@
         return this.checkIsInSelect(node.parentNode);
       },
       handleKeydown (e) {
-        e.preventDefault();
+        // e.preventDefault();
         // 如果下拉框是下拉的情况下 
         if (this.visible) {
           const keyCode = e.keyCode;
@@ -386,6 +399,47 @@
               child.selected = true;
             }
           })
+        }
+      },
+      delItem (value) {
+        if (this.selectedMultiple.length > 0) {
+          this.selectedMultiple.forEach((item, index) => {
+            if (item.value === value) {
+              this.removeItem(index);
+              this.$refs.input.focus();
+              this.removeSelectState(value);
+            }
+          });
+        }
+      },
+      removeSelectState(value) {
+        this.$children.forEach((child, index) => {
+          const childValue = child.$options.propsData.value;
+          if (childValue === value) {
+            child.selected = false;
+          }
+        });
+      },
+      // 根据vlaue进行模糊匹配
+      searchMatch(curLabel) {
+        // 保存匹配的项
+        let matchArrs = [];
+        if (this.$children.length > 0) {
+          this.$children.forEach((child, index) => {
+            const label = child.$el.innerHTML;
+            if (label.indexOf(curLabel) > -1) {
+              // 说明已经匹配到了 给当前的子元素设置属性
+              child.isMatch = true;
+              matchArrs.push(child);
+            } else {
+              child.isMatch = false;
+            }
+          });
+        }
+        if (matchArrs.length < 1) {
+          this.notFound = true;
+        } else {
+          this.notFound = false;
         }
       },
     }

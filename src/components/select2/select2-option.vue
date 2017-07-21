@@ -1,6 +1,6 @@
 
 <template>
-  <li :class="classes" @click.stop="select" ref="options">
+  <li :class="classes" @click.stop="select" ref="options" v-show="isMatch">
     <slot>{{ showLabel }}</slot>
   </li>
 </template>
@@ -29,6 +29,7 @@
       return {
         selected: false,
         isHover: false,
+        isMatch: true,    // 模糊匹配是否匹配到了 默认为true 
       }
     },
     computed: {

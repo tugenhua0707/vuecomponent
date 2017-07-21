@@ -322,7 +322,8 @@
 .tb-select2-tag i {
   position: absolute;
   top: -1px;
-  right: 4px;
+  right: 0px;
+  padding-right: 4px;
   font-style: normal;
   font-size: 14px; 
 }
