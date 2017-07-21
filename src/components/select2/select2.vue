@@ -3,7 +3,7 @@
   <div :class="classes">
     <div :class="[prefixCls + '-selection']" @click="toggleMenu">
       <div class="tb-select2-tag" v-for="(item, index) in selectedMultiple">
-        <span class="tb-select2-tag-text">{{ item.label }}</span><i @click.stop="delItem(item.value)">x</i>
+        <span class="tb-select2-tag-text">{{ item.label }}</span><i @click.stop="delTagItem(item.value)">x</i>
       </div>
       <span :class="[prefixCls + '-placeholder']" v-show="showPlaceholder && !filterable">{{ placeholder }}</span>
       <span :class="[prefixCls + '-selected-value']" v-show="!showPlaceholder && !multiple && !filterable">{{ selectedSingle }}</span>
@@ -228,7 +228,6 @@
           }
         }
       }
-
       // 点击document事件
       const doc = document.getElementsByTagName('body')[0];
       this.addEvent('click', doc, (e) => {
@@ -314,7 +313,6 @@
         return this.selectedMultiple.splice(index, 1);
       },
       checkIsInSelect(node) {
-
         if (!node) {
           return false;
         } else if (node.className && node.className.indexOf('tb-select2') !== -1) {
@@ -345,6 +343,10 @@
                 }
               }
             });
+          }
+          // delete 键删除一项
+          if (keyCode === 8) {
+            this.deleteKeyItem();
           }
         }
       },
@@ -401,7 +403,7 @@
           })
         }
       },
-      delItem (value) {
+      delTagItem (value) {
         if (this.selectedMultiple.length > 0) {
           this.selectedMultiple.forEach((item, index) => {
             if (item.value === value) {
@@ -444,6 +446,18 @@
           this.notFound = true;
         } else {
           this.notFound = false;
+        }
+      },
+      // 键盘delete键 删除一项，从后面依次删
+      deleteKeyItem() {
+        // 如果是模糊匹配的话，可以删，因为有光标
+        if (this.filterable) {
+          if (this.selectedMultiple.length > 0) {
+            var index = this.selectedMultiple.length -1;
+            var curValue = this.selectedMultiple[index].value;
+            this.removeItem(index);
+            this.removeSelectState(curValue);
+          }
         }
       },
     }

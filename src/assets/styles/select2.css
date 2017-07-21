@@ -137,10 +137,6 @@
 .tb-select2-selection:hover {
   border-color: #57a3f3
 }
-
-.tb-select2-selection:hover .tb-select2-arrow:first-of-type {
-  display: inline-block
-}
 .tb-select2-arrow {
   position: absolute;
   top: 50%;
@@ -263,10 +259,6 @@
   color: #bbbec4
 }
 
-.tb-select2-not-found li:not([class^=ivu-]) {
-  margin-bottom: 0
-}
-
 .tb-select2-item {
   margin: 0;
   line-height: normal;
@@ -295,7 +287,8 @@
   background-color: #fff
 }
 
-.tb-select2-single .tb-select2-item-selected, .tb-select2-single .tb-select2-item-selected:hover {
+.tb-select2-single .tb-select2-item-selected, 
+.tb-select2-single .tb-select2-item-selected:hover {
   color: #fff;
   background: rgba(45,140,240,.9)
 }
