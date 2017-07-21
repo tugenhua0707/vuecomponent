@@ -406,7 +406,11 @@
           this.selectedMultiple.forEach((item, index) => {
             if (item.value === value) {
               this.removeItem(index);
-              this.$refs.input.focus();
+              if (this.filterable) {
+                this.$refs.input.focus();
+              }
+              // 设置回调
+              this.$emit('change', this.selectedMultiple);
               this.removeSelectState(value);
             }
           });
