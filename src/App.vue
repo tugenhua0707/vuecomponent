@@ -81,6 +81,7 @@ export default {
     margin-top: 50px;
     color: #2c3e50;
     margin-left: 50px;
+    margin-bottom: 50px;
   }
   a {
     color: #42b983;

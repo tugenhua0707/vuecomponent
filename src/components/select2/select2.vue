@@ -3,18 +3,18 @@
   <div :class="classes">
     <div :class="[prefixCls + '-selection']" @click="toggleMenu">
       <div class="tb-select2-tag" v-for="(item, index) in selectedMultiple">
-        <span class="tb-select2-tag-text">{{ item.label }}<i></i></span>
+        <span class="tb-select2-tag-text">{{ item.label }}</span><i>x</i>
       </div>
       <span :class="[prefixCls + '-placeholder']" v-show="showPlaceholder && !filterable">{{ placeholder }}</span>
       <span :class="[prefixCls + '-selected-value']" v-show="!showPlaceholder && !multiple && !filterable">{{ selectedSingle }}</span>
       <input 
         type="text"
         :class="[prefixCls + '-input']"
-        v-show="filterable"
+        v-show="showPlaceholder && filterable"
         ref="input"
         :style="inputStyle"
         @keydown="resetInputLength"
-        :placeholder="placeholder"
+        :placeholder="placeholder" 
       />
       <i class="tb-icon tb-icon-caret-down tb-select2-arrow" v-show="!visible"></i>
       <i class="tb-icon tb-icon-caret-up tb-select2-arrow" v-show="visible"></i>
@@ -94,7 +94,8 @@
             [`${prefixCls}-disabled`]: this.disabled,
             [`${prefixCls}-multiple`]: this.multiple,
             [`${prefixCls}-single`]: !this.multiple && !this.filterable,
-            [`${prefixCls}-filterable`]: this.filterable
+            [`${prefixCls}-filterable`]: this.filterable,
+            [`${prefixCls}-visible`]: this.visible
           }
         ]
       },
