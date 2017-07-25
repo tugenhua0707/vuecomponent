@@ -101,6 +101,7 @@
           }
         ]
       },
+      // 如果外部调用该组件 可以通过flag参数直接返回
       showPlaceholder () {
         let isPlaceholder = false;
         // 如果当前的值为空
@@ -172,7 +173,7 @@
               }
               this.focusIndex = index;
               // 对外提供回调 是一个数组对象 参数包括 key 和 value index 
-              this.$emit('change', this.selectedMultiple); 
+              this.$emit('change', this, this.selectedMultiple); 
             }
           });
         } else {
@@ -186,7 +187,7 @@
               child.selected = true;
               this.hide();
               // 对外提供回调, 参数为对象 key 和 value index
-              this.$emit('change', { 'key': label, 'value': childValue, "index": index });
+              this.$emit('change', this, { 'key': label, 'value': childValue, "index": index });
               this.focusIndex = index;
             } else {
               // 设置子元素的数据
@@ -211,7 +212,7 @@
             this.$refs.input.focus();
           }
           // 对外提供回调 是一个数组对象 参数包括 key 和 value index 
-          this.$emit('change', this.selectedMultiple); 
+          this.$emit('change', this, this.selectedMultiple); 
         }
       } else {
         // 单选
@@ -264,7 +265,7 @@
           this.hide();
           this.focusIndex = index;
           // 对外提供回调, 参数为对象 key 和 value index
-          this.$emit('change', { 'key': child.$el.innerHTML, 'value': childValue, "index": index });
+          this.$emit('change', this, { 'key': child.$el.innerHTML, 'value': childValue, "index": index });
         }
       },
       // 默认选中多选值
@@ -374,7 +375,7 @@
                 this.selectedSingle = label;
                 this.currentValue = childValue;
                 // 设置回调
-                this.$emit('change', { 'key': label, 'value': childValue, "index": index });
+                this.$emit('change', this, { 'key': label, 'value': childValue, "index": index });
               }
             }
           } else {
@@ -412,7 +413,7 @@
                 this.$refs.input.focus();
               }
               // 设置回调
-              this.$emit('change', this.selectedMultiple);
+              this.$emit('change', this, this.selectedMultiple);
               this.removeSelectState(value);
             }
           });

@@ -33,7 +33,7 @@
           }
         ],
         select2Value: 'hangzhou',
-        changeFunc(obj) {
+        changeFunc($this, obj) {
           console.log(obj);
         }
       }

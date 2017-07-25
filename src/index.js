@@ -13,7 +13,8 @@ import './assets/styles/button.css'
 import './assets/styles/dropdown.css';
 
 import './assets/styles/select2.css';
-
+import './assets/styles/cityselect.css';
+import './assets/styles/inputnumber.css';
 import iView from './main';
 
 Vue.use(iView);

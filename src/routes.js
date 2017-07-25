@@ -21,6 +21,9 @@ import dropdown from './views/dropdown/dropdown.vue';
 import select2 from './views/select2/select2.vue';
 import select2Multiple from './views/select2/select2Multiple.vue';
 import select2Filterable from './views/select2/select2Filterable.vue';
+import cityselect from './views/cityselect/cityselect.vue';
+import inputnumber from './views/input-number/input-number.vue';
+
 Vue.use(Router)
 
 export default new Router({
@@ -100,6 +103,14 @@ export default new Router({
     {
       path: '/select2Filterable',
       component: select2Filterable
+    },
+    {
+      path: '/cityselect',
+      component: cityselect
+    },
+    {
+      path: '/inputnumber',
+      component: inputnumber
     }
   ]
 })

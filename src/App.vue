@@ -49,6 +49,14 @@
         <router-link class='nav-item' to='/select2Multiple'>select2Multiple</router-link>
         <router-link class='nav-item' to='/select2Filterable'>select2Filterable</router-link>
       </div>
+      <div class='nav-list' style="margin-top:15px;">
+        <h3>cityselect省市区</h3>
+        <router-link class='nav-item' to='/cityselect'>cityselect</router-link>
+      </div>
+      <div class='nav-list' style="margin-top:15px;">
+        <h3>数字输入框</h3>
+        <router-link class='nav-item' to='/inputnumber'>inputnumber</router-link>
+      </div>
     </div>
     <div>
       <router-view></router-view>
