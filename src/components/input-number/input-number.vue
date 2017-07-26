@@ -122,9 +122,6 @@
         if (this.upDisabled && isNaN(targetVal)) {
           return false;
         }
-        if (this.upDisabled) {
-          return;
-        }
         this.changeStep('up', e);
       },
       down (e) {
@@ -175,16 +172,17 @@
         this.setValue(e, val);
       },
       setValue(e, val) {
+        val = this.getValue(val);
+        this.currentValue = val;
         this.$nextTick(() => {
-          this.currentValue = val;
           this.$emit('input', val);
           this.$emit('change', val);
         });
       },
-      focus () {
+      focus (e) {
         this.focused = true;
       },
-      blur () {
+      blur (e) {
         this.focused = false;
       },
       keyDown (e) {
@@ -204,12 +202,16 @@
         const val = e.target.value;
         if (val !== '') {
           if (/^\d+$/.test(val) || /^\d+(\.)?$/.test(val) || /^\d+(\.\d+)?$/.test(val)) {
-            // 什么都不做
+
+            this.setValue(e, val);
+
           } else {
             e.target.value = this.currentValue;
           }
+        } else {
+          this.currentValue = 1;
         }
-        this.currentValue = e.target.value;
+        
       },
       isValueNumber(value) {
         return (/^\d+(\.\d+)?$/.test(value + ''));
