@@ -51,7 +51,7 @@
         default: 1
       },
       value: {
-        type: Number,
+        type: [Number, String],
         default: 1
       },
       disabled: {
@@ -118,17 +118,19 @@
         return (num1 * m + num2 * m) / m;
       },
       up (e) {
-        // 判断向上按钮是否被禁用 或 值 是不是一个数字
-        const targetValue = Number(this.$refs.input.value.trim());
-        if (this.upDisabled || isNaN(targetValue)) {
+        const targetVal = Number(e.target.value);
+        if (this.upDisabled && isNaN(targetVal)) {
+          return false;
+        }
+        if (this.upDisabled) {
           return;
         }
         this.changeStep('up', e);
       },
       down (e) {
-        const targetValue = Number(this.$refs.input.value.trim());
-        if (this.downDisabled || isNaN(targetValue)) {
-          return;
+        const targetVal = Number(e.target.value);
+        if (this.downDisabled && isNaN(targetVal)) {
+          return false;
         }
         this.changeStep('down', e);
       },
@@ -137,15 +139,18 @@
         const min = this.min;
         if (value > max) {
           value = max;
+          this.currentValue = max;
           this.upDisabled = true;
           this.downDisabled = false;
         } else if(value < min) {
           value = min;
+          this.currentValue = min;
           this.upDisabled = false;
           this.downDisabled = true;
         } else {
           this.upDisabled = false;
           this.downDisabled = false;
+          this.currentValue = value;
         }
         return value;
       },
@@ -167,16 +172,14 @@
           val = this.addNum(val, -step);
         }
         val = this.getValue(val);
-        this.setValue(val);
+        this.setValue(e, val);
       },
-      setValue(val) {
-
+      setValue(e, val) {
         this.$nextTick(() => {
           this.currentValue = val;
           this.$emit('input', val);
           this.$emit('change', val);
         });
-        
       },
       focus () {
         this.focused = true;
@@ -185,30 +188,31 @@
         this.focused = false;
       },
       keyDown (e) {
-        e.preventDefault();
         // 上下键 操作
         const keyCode = e.keyCode;
         if (keyCode === 38) {
+          // 解决input光标移动到前面去的bug
+          e.preventDefault();
           this.up(e);
         } else if(keyCode === 40) {
+          // 解决input光标移动到前面去的bug
+          e.preventDefault();
           this.down(e);
         }
       },
-      isValueNumber(value) {
-        return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value + '');
-      },
-      keyUp(e) {
-        e.preventDefault();
-        let val = e.target.value.trim();
-        // 先判断 val 是否是数字型，如果不是的话，就把 currentValue保存的值 赋值给 当前值，否则的话，就把新值赋值给 currentValue
-        if (this.isValueNumber(val)) {
-          val = Number(val);
-          // 判断当前值的大小 是否在最大和最小之间
-          val = this.getValue(val);
-          this.setValue(val);
-        } else {  
-          e.target.value = this.currentValue;
+      keyUp (e) {
+        const val = e.target.value;
+        if (val !== '') {
+          if (/^\d+$/.test(val) || /^\d+(\.)?$/.test(val) || /^\d+(\.\d+)?$/.test(val)) {
+            // 什么都不做
+          } else {
+            e.target.value = this.currentValue;
+          }
         }
+        this.currentValue = e.target.value;
+      },
+      isValueNumber(value) {
+        return (/^\d+(\.\d+)?$/.test(value + ''));
       },
     }
   }
