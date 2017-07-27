@@ -9,6 +9,18 @@
         <router-link class='nav-item' to='/about'>关于</router-link>
       </div>
       <div class='nav-list' style="margin-top:15px;">
+        <h3>固定在顶部</h3>
+        <router-link class='nav-item' to='/stickyTop'>固定在顶部</router-link>
+      </div>
+      <div class='nav-list' style="margin-top:15px;">
+        <h3>固定在离顶部20px</h3>
+        <router-link class='nav-item' to='/stickyTop2'>固定在离顶部20px</router-link>
+      </div>
+      <div class='nav-list' style="margin-top:15px;">
+        <h3>固定在离低部20px</h3>
+        <router-link class='nav-item' to='/stickyTop3'>固定在离低部20px</router-link>
+      </div>
+      <div class='nav-list' style="margin-top:15px;">
         <h3>下面是复选框的demo</h3>
         <router-link class='nav-item' to='/checkbox'>复选框简单使用</router-link>
         <router-link class='nav-item' to='/checkboxGroup'>复选框多选</router-link>

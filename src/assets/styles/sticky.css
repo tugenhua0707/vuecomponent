@@ -1,0 +1,13 @@
+body{
+  height: 2000px;
+}
+.tb-sticky-elem{
+  display: inline-block;
+  height: 30px;
+  background: #f60;
+  color: #fff;
+  padding: 5px;
+  line-height: 30px;
+  text-align: center;
+}
+

@@ -23,7 +23,9 @@ import select2Multiple from './views/select2/select2Multiple.vue';
 import select2Filterable from './views/select2/select2Filterable.vue';
 import cityselect from './views/cityselect/cityselect.vue';
 import inputnumber from './views/input-number/input-number.vue';
-
+import stickyTop from './views/sticky/sticky.vue';
+import stickyTop2 from './views/sticky/sticky2.vue';
+import stickyTop3 from './views/sticky/sticky3.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -111,6 +113,18 @@ export default new Router({
     {
       path: '/inputnumber',
       component: inputnumber
+    },
+    {
+      path: '/stickyTop',
+      component: stickyTop
+    },
+    {
+      path: '/stickyTop2',
+      component: stickyTop2
+    },
+    {
+      path: '/stickyTop3',
+      component: stickyTop3
     }
   ]
 })

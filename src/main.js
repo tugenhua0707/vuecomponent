@@ -11,6 +11,7 @@ import Select2 from './components/select2/select2.vue';
 import Select2Option from './components/select2/select2-option.vue';
 import CitySelect from './components/cityselect/cityselect.vue';
 import InputNumber from './components/input-number/input-number.vue';
+import Sticky from './components/sticky/sticky.vue';
 // import DropDown from './components/dropdown/dropdown.vue';
 /* import DropDownItem from './components/dropdown/dropdown-item.vue';
 import DropDownMenu from './components/dropdown/dropdown-menu.vue'; */
@@ -28,6 +29,7 @@ const iview = {
   'tb-select2-option': Select2Option,
   'tb-city-select': CitySelect,
   'tb-input-number': InputNumber,
+  'tb-sticky': Sticky,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu
@@ -56,6 +58,7 @@ export default {
   'tb-select2-option': Select2Option,
   'tb-city-select': CitySelect,
   'tb-input-number': InputNumber,
+  'tb-sticky': Sticky,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu
