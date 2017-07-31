@@ -1,0 +1,44 @@
+
+.tb-badge {
+  position: relative;
+  display: inline-block;
+}
+.tb-badge-count {
+  position: absolute;
+  top: -10px;
+  transform: translateX(50%);
+  right: 0px;
+  border-radius: 10px;
+  min-width: 20px;
+  height: 20px;
+  background: #ed3f14;
+  color: #fff;
+  line-height: 20px;
+  text-align: center;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  padding: 0 6px;
+  transform-origin: -10% center;
+  box-sizing: border-box;
+}
+
+.tb-badge-count a, .tb-badge-count a:hover {
+  color: #fff
+}
+
+.tb-badge-count-alone {
+  top: auto;
+  display: block;
+  position: relative;
+}
+.tb-badge-dot {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  height: 8px;
+  width: 8px;
+  border-radius: 100%;
+  background: #ed3f14;
+  z-index: 10;
+}

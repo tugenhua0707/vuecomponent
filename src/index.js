@@ -16,6 +16,8 @@ import './assets/styles/select2.css';
 import './assets/styles/cityselect.css';
 import './assets/styles/inputnumber.css';
 import './assets/styles/sticky.css';
+import './assets/styles/badge.css';
+
 import iView from './main';
 
 Vue.use(iView);

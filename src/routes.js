@@ -26,6 +26,8 @@ import inputnumber from './views/input-number/input-number.vue';
 import stickyTop from './views/sticky/sticky.vue';
 import stickyTop2 from './views/sticky/sticky2.vue';
 import stickyTop3 from './views/sticky/sticky3.vue';
+import badge from './views/badge/badge.vue';
+
 Vue.use(Router)
 
 export default new Router({
@@ -125,6 +127,10 @@ export default new Router({
     {
       path: '/stickyTop3',
       component: stickyTop3
+    }, 
+    {
+      path: '/badge',
+      component: badge
     }
   ]
 })
