@@ -17,6 +17,7 @@ import './assets/styles/cityselect.css';
 import './assets/styles/inputnumber.css';
 import './assets/styles/sticky.css';
 import './assets/styles/badge.css';
+import './assets/styles/switchable.css';
 
 import iView from './main';
 

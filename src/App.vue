@@ -73,6 +73,10 @@
         <h3>badge微标</h3>
         <router-link class='nav-item' to='/badge'>badge</router-link>
       </div>
+      <div class='nav-list' style="margin-top:15px;">
+        <h3>switchable</h3>
+        <router-link class='nav-item' to='/switchable'>switchable</router-link>
+      </div>
     </div>
     <div>
       <router-view></router-view>
