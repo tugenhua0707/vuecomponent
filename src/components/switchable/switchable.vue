@@ -6,8 +6,8 @@
         <slot></slot>
       </div>
     </div>
-    <button :class="[prefixCls+'-prev']" @click="prevHandler" v-show="isArrow"><上一页</button>
-    <button :class="[prefixCls+'-next']" @click="nextHandler" v-show="isArrow">下一页></button>
+    <button :class="[prefixCls+'-prev']" @click="prevHandler" v-show="isArrow"><</button>
+    <button :class="[prefixCls+'-next']" @click="nextHandler" v-show="isArrow">></button>
     <ul :class="[prefixCls+'-nav']">
       <li 
         v-for="(item, index) in slides" :class="[index === currentIndex ? 'active' : '']"
@@ -65,8 +65,8 @@
       },
       // 切换到第几项，默认为第一项
       switchToIndex: {
-        type: Number,
-        default: 2
+        type: [Number, String],
+        default: 0
       },
       // 鼠标移动到容器内是否停止滚动， 默认停止
       pauseOnHover: {
@@ -115,6 +115,7 @@
       if (this.autoplay) {
         this.setAutoplay();
       }
+      console.log(this.isArrow)
     },
     methods: {
       childsLen () {
