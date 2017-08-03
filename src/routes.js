@@ -28,7 +28,7 @@ import stickyTop2 from './views/sticky/sticky2.vue';
 import stickyTop3 from './views/sticky/sticky3.vue';
 import badge from './views/badge/badge.vue';
 import switchable from './views/switchable/switchable.vue';
-
+import backtop from './views/back-top/back-top.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -136,6 +136,10 @@ export default new Router({
     {
       path: '/switchable',
       component: switchable
-    }
+    },
+    {
+      path: '/backtop',
+      component: backtop
+    },
   ]
 })

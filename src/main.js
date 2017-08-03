@@ -14,7 +14,9 @@ import InputNumber from './components/input-number/input-number.vue';
 import Sticky from './components/sticky/sticky.vue';
 import Badge from './components/badge/badge.vue';
 import Switchable from './components/switchable/switchable.vue';
-import SwitchableItem from './components/switchable/switchable-item.vue'
+import SwitchableItem from './components/switchable/switchable-item.vue';
+import BackTop from './components/back-top/back-top.vue';
+
 // import DropDown from './components/dropdown/dropdown.vue';
 /* import DropDownItem from './components/dropdown/dropdown-item.vue';
 import DropDownMenu from './components/dropdown/dropdown-menu.vue'; */
@@ -36,6 +38,7 @@ const iview = {
   'tb-badge': Badge,
   'tb-switchable': Switchable,
   'tb-switchable-item': SwitchableItem,
+  'tb-backtop': BackTop,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu
@@ -68,6 +71,7 @@ export default {
   'tb-badge': Badge,
   'tb-switchable': Switchable,
   'tb-switchable-item': SwitchableItem,
+  'tb-backtop': BackTop,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu
