@@ -19,6 +19,7 @@ import './assets/styles/sticky.css';
 import './assets/styles/badge.css';
 import './assets/styles/switchable.css';
 import './assets/styles/backtop.css';
+import './assets/styles/table.css';
 import iView from './main';
 
 Vue.use(iView);

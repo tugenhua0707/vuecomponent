@@ -1,0 +1,203 @@
+ul,
+li {
+  list-style: none;
+}
+.tb-table {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
+  background-color: #fff;
+  border: 1px solid #dfe6ec;
+  font-size: 14px;
+  color: #1f2d3d;
+  overflow: hidden;
+}
+.tb-table th {
+  border-bottom: 1px solid #dfe6ec;
+  background-color: #eef1f6;
+  text-align: left;
+}
+.tb-table,
+.tb-table-body,
+.tb-table-head {
+  table-layout: fixed;
+}
+.tb-table tr,
+.tb-table-body tr,
+.tb-table-head tr {
+  background-color: #fff;
+}
+.tb-table tr td,
+.tb-table-body tr td,
+.tb-table-head tr td {
+  transition: background-color 0.25s ease;
+  border-bottom: 1px solid #dfe6ec;
+}
+.tb-table tr,
+.tb-table td,
+.tb-table th {
+  position: relative;
+  min-width: 0;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+.tb-table tr .cell,
+.tb-table td .cell,
+.tb-table th .cell {
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  padding-left: 18px;
+  overflow: hidden;
+}
+.tb-table tr .cell .tb-button,
+.tb-table td .cell .tb-button,
+.tb-table th .cell .tb-button {
+  border: none;
+  color: #20a0ff;
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 12px;
+  cursor: pointer;
+}
+.tb-table-body-wrapper,
+.tb-table-head-wrapper {
+  width: 100%;
+}
+.tb-table th .cell {
+  line-height: 30px;
+}
+.tb-table td .cell {
+  line-height: 24px;
+}
+.tb-table tr:hover,
+.tb-table tr.stripe:hover {
+  background-color: #eef1f6;
+}
+.tb-table-bottom-none {
+  border-bottom: none;
+}
+/* 新增类名 */
+.bgColor {
+  background-color: #eef1f6 !important;
+}
+/* 带斑马纹表格 */
+.tb-table tr.stripe {
+  background-color: #fafafa;
+}
+/* 带边框的表格 */
+.tb-table-border td,
+.tb-table-border th {
+  border-right: 1px solid #dfe6ec;
+}
+.tb-table-border td:last-child,
+.tb-table-border th:last-child {
+  border-right: none;
+}
+/* 带状态的表格 外部定义样式 现在只是测试demo */
+.tb-table .info-row {
+  background-color: #c9e5f5;
+}
+.tb-table .positive-row {
+  background-color: #e2f0e4;
+}
+/* 固定表头 */
+.tb-table-fixed-head .gutter {
+  width: 15px;
+}
+.tb-table-fixed-head {
+  height: 300px;
+  border-bottom: 1px solid #dfe6ec;
+  overflow: hidden;
+}
+.tb-table-fixed-head .tb-table-body-wrapper {
+  height: 259px;
+  overflow: auto;
+}
+/* 固定列 */
+.tb-table-fixed-col {
+  overflow: auto;
+}
+.tb-table-body-wrapper {
+  position: relative;
+}
+.hidden {
+/* visibility hidden */
+  display: none;
+}
+.tb-table-fixed-col-left,
+.tb-table-fixed-col-right {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: 1px 0 8px #d3d4d6;
+  content: "";
+  overflow: hidden;
+}
+.tb-table-fixed-col-left .tb-table-fixed-head-wrapper,
+.tb-table-fixed-col-right .tb-table-fixed-head-wrapper,
+.tb-table-fixed-col-left .tb-table-fixed-body-wrapper,
+.tb-table-fixed-col-right .tb-table-fixed-body-wrapper {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+  left: 0;
+}
+.tb-table-fixed-col-left .tb-table-fixed-head-wrapper table,
+.tb-table-fixed-col-right .tb-table-fixed-head-wrapper table,
+.tb-table-fixed-col-left .tb-table-fixed-body-wrapper table,
+.tb-table-fixed-col-right .tb-table-fixed-body-wrapper table {
+  width: 100%;
+  table-layout: fixed;
+}
+.tb-table-fixed-col-left .tb-table-fixed-body-wrapper,
+.tb-table-fixed-col-right .tb-table-fixed-body-wrapper {
+  top: 40px;
+  overflow: hidden;
+}
+.tb-table-fixed-col-right {
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 0;
+  box-shadow: -1px 0 8px #d3d4d6;
+/* 鼠标移动上去 变颜色*/
+}
+.tb-table-fixed-col-right .tb-table-fixed-head-wrapper,
+.tb-table-fixed-col-right .tb-table-fixed-body-wrapper {
+  left: auto;
+  right: 0;
+}
+.tb-table-fixed-col-right .tb-table-fixed-body-wrapper td.hover-row,
+.tb-table-fixed-col-right .tb-table-body-wrapper td.hover-row {
+  background: #eef1f6;
+}
+/* 固定列和表头 */
+.tb-table-fixed-col-header .tb-table-body-wrapper {
+  overflow: auto;
+}
+.tb-table-fixed-col-header .tb-table-head-wrapper {
+  overflow: hidden;
+}
+.tb-table-fixed-col-header-container .tb-table-fixed-col-right {
+  right: 15px;
+}
+.tb-table-fixed-col-header-container .tb-table-fixed-body-wrapper {
+  overflow: hidden;
+}
+.tb-table-fixed-col-header-container .tb-table-fixed-right-patch {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-left: 1px solid #dfe6ec;
+  background: #eef1f6;
+  overflow: hidden;
+}
+/*  单选 */
+.tb-table-select-single .current-row td {
+  background: #edf7ff;
+}

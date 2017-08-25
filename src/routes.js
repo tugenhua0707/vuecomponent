@@ -29,6 +29,8 @@ import stickyTop3 from './views/sticky/sticky3.vue';
 import badge from './views/badge/badge.vue';
 import switchable from './views/switchable/switchable.vue';
 import backtop from './views/back-top/back-top.vue';
+import table from './views/table/table.vue';
+
 Vue.use(Router)
 
 export default new Router({
@@ -141,5 +143,9 @@ export default new Router({
       path: '/backtop',
       component: backtop
     },
+    {
+      path: '/table',
+      component: table
+    }
   ]
 })
