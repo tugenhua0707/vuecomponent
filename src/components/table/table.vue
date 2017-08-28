@@ -87,7 +87,7 @@
         ></tableBody>
       </div>
     </div>
-    <div :class="[prefixCls + '-fixed-right-patch']" v-if="showheadcol || fixedhead" :style="{width:'14px', height: columnsheight + 'px'}"></div>
+    <div :class="[prefixCls + '-fixed-right-patch']" v-if="showheadcol" :style="{width:'14px', height: columnsheight + 'px'}"></div>
   </div>
 </template>
 
@@ -172,6 +172,7 @@
           this.columnsheight = item.height;
         }
       });
+
       // 获取数组里面最大值
       var maxValue = Math.max.apply(null, widthArrs);
 

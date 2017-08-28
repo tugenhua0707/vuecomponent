@@ -4,13 +4,13 @@
     <colgroup>
       <col v-for="(column, index) in columns" :width="column.width" v-if="!fixedhead"></col>
       <col v-for="(w, index) in columnswidth" :width="w" v-if="fixedhead"></col>
-      <col class="gutter" v-if="fixedhead"></col>
     </colgroup>
     <thead>
       <tr v-if="col.length <= 0">
         <th v-for="(column, index) in columns" :height="columnsheight">
           <div :class="['cell']">{{column.title}}</div>
         </th>
+        <th width="15" v-if="fixedhead"></th>
       </tr>
       <tr v-if="col.length > 0">
         <th v-for="(column, index) in columns" :class="(showcol*1) === index ? column.fixHead : 'hidden'" 
