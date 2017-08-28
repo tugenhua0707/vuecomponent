@@ -125,8 +125,7 @@ li {
   position: relative;
 }
 .hidden {
-/* visibility hidden */
-  display: none;
+  visibility: hidden;
 }
 .tb-table-fixed-col-left,
 .tb-table-fixed-col-right {
@@ -143,7 +142,6 @@ li {
 .tb-table-fixed-col-right .tb-table-fixed-body-wrapper {
   position: absolute;
   top: 0;
-  width: 100%;
   z-index: 3;
   left: 0;
 }
@@ -189,7 +187,7 @@ li {
 .tb-table-fixed-col-header-container .tb-table-fixed-body-wrapper {
   overflow: hidden;
 }
-.tb-table-fixed-col-header-container .tb-table-fixed-right-patch {
+.tb-table-fixed-right-patch {
   position: absolute;
   top: 0;
   right: 0;

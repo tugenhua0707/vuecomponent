@@ -2,22 +2,21 @@
 <template>
   <table cellpadding="0" cellspacing="0" width="100%" :class="[prefixCls+'-head']">
     <colgroup>
-      <col v-for="(column, index) in columns" :width="column.width" v-show="!fixedhead"></col>
-      <col v-for="(w, index) in columnswidth" :width="w" v-show="fixedhead"></col>
-      <col class="gutter" v-show="fixedhead"></col>
+      <col v-for="(column, index) in columns" :width="column.width" v-if="!fixedhead"></col>
+      <col v-for="(w, index) in columnswidth" :width="w" v-if="fixedhead"></col>
+      <col class="gutter" v-if="fixedhead"></col>
     </colgroup>
     <thead>
-      <tr v-show="col.length <= 0">
+      <tr v-if="col.length <= 0">
         <th v-for="(column, index) in columns" :height="columnsheight">
           <div :class="['cell']">{{column.title}}</div>
         </th>
-        <th width="15" v-show="fixedhead"></th>
       </tr>
-      <tr v-show="col.length > 0">
-        <th v-for="(column, index) in columns" :class="(showcol*1) === index ? column.fixHead : 'hidden'" :height="columnsheight">
+      <tr v-if="col.length > 0">
+        <th v-for="(column, index) in columns" :class="(showcol*1) === index ? column.fixHead : 'hidden'" 
+          :height="columnsheight">
           <div :class="['cell']">{{column.title}}</div>
         </th>
-        <th width="15" v-show="fixedhead"></th>
       </tr>
     </thead>
   </table>
@@ -43,7 +42,7 @@
         type: Array
       },
       columnsheight: {
-        type: String
+        type: [Number, String]
       },
       fixedcol: {
         type: Array

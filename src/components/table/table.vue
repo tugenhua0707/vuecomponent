@@ -27,7 +27,7 @@
     
     <div 
       :class="[prefixCls + '-fixed-col-left']" 
-      v-show="showleftcol"   
+      v-if="showleftcol"   
       :style="{width:leftwidth, height:leftheight}"
     >
       <div :class="[prefixCls + '-fixed-head-wrapper']">
@@ -58,7 +58,7 @@
     </div>
     <div 
       :class="[prefixCls + '-fixed-col-right']" 
-      v-show="showrightcol"  
+      v-if="showrightcol"  
       :style="{width:rightwidth, height:rightheight}"
     >
       <div :class="[prefixCls + '-fixed-head-wrapper']">
@@ -87,7 +87,7 @@
         ></tableBody>
       </div>
     </div>
-    <div :class="[prefixCls + '-fixed-right-patch']" v-show="showheadcol" :style="{width:'14px', height: columnsheight + 'px'}"></div>
+    <div :class="[prefixCls + '-fixed-right-patch']" v-if="showheadcol || fixedhead" :style="{width:'14px', height: columnsheight + 'px'}"></div>
   </div>
 </template>
 
@@ -133,6 +133,16 @@
       // 需要固定列  ['0'] 就是最左侧固定， ["1"] 就是最右侧固定  ["0, 1"] 左右侧固定
       fixedcol: {
         type: Array
+      },
+      // 是否是单选
+      singleTable: {
+        type: Boolean,
+        default: false
+      },
+      // 是否多选
+      multipleTable: {
+        type: Boolean,
+        default: false
       }
     },
     data () {
@@ -150,7 +160,8 @@
         showrightcol: false,
         showheadcol: this.fixedcol && this.fixedcol.length && this.fixedhead,
         bodyHeight: '',
-        objData: this.makeData()
+        objData: this.makeData(),
+        multipeSelects: []
       }
     },
     beforeMount() {
@@ -169,12 +180,11 @@
       
       // 最大值的宽度 需要减去 15， 因为需要包括纵向滚动条的宽度
       var resetMaxValue = maxValue*1 - 15;
+
       // 最后重新设置数组的宽度
       widthArrs[maxIndex] = resetMaxValue.toString();
       this.columnswidth = widthArrs;
-
       this.fixedcols = this.fixedcol ? this.fixedcol : [];
-
       // 是否左右侧固定 如果是左右固定的话，给列和数据动态添加一个字段 ishow
       if (this.fixedcols.length > 0) {
         this.columns.forEach((item, i) => {
@@ -202,7 +212,6 @@
           // 最右侧固定
           this.rightwidth = this.columns[this.columns.length - 1].width + 'px';
           this.rightheight = this.columnsheight*1 * (this.data.length+1) + 'px';
-
           this.showrightcol = true;
         }
       } else if(this.fixedcols.length === 2) {
@@ -228,7 +237,6 @@
           }
         });
       }
-
       // 如果固定列和表头时 设置bodyHeight 
       if (this.fixedcol && this.fixedcol.length && this.fixedhead) {
         this.bodyHeight = this.tableheight*1 - 1 - this.columnsheight*1 + 'px';
@@ -248,7 +256,9 @@
           {
             [`${prefixCls}-border`]: this.border,
             [`${prefixCls}-fixed-head`]: this.fixedhead && !this.fixedcol,
-            [`${prefixCls}-fixed-col-header-container`]: this.fixedhead && this.fixedcol
+            [`${prefixCls}-fixed-col-header-container`]: this.fixedhead && this.fixedcol,
+            [`${prefixCls}-select-single`]: this.singleTable,
+            [`${prefixCls}-select-multipe`]: this.multipleTable
           }
         ]
       },
@@ -262,10 +272,22 @@
           }  
         ]
       },
+      // 是否左侧固定
+      isLeftFixed() {
+        if (this.fixedcol && this.fixedcol.length === 1) {
+          return this.fixedcol[0]*1 === 0;
+        }
+        return false;
+      },
+      // 是否右侧固定
+      isRightFixed() {
+        if (this.fixedcol && this.fixedcol.length === 1) {
+          return this.fixedcol[0]*1 === 1;
+        }
+        return false;
+      },
     },
-    mounted() {
-      
-    },
+    mounted() {},
     methods: {
       makeData () {
         var data = [];
@@ -273,6 +295,8 @@
           row._index = index;
           data[index] = row;
           data[index]._isHover = false;
+          data[index]._selectSingleRow = false;
+          data[index]._selectMultipleRow = false;
         });
         return data;
       },
@@ -291,18 +315,52 @@
        this.objData[_index]._isHover = false;
        this.objData = Object.assign({}, this.objData)
       },
-      // 是否左侧固定
-      isLeftFixed() {
-
-      },
-      // 是否右侧固定
-      isRightFixed() {
-
-      },
       handleBodyScroll(event) {
-        this.$refs.header.scrollLeft = event.target.scrollLeft;
-        this.$refs.fixedLeftBody.scrollTop = event.target.scrollTop;
-        this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
+        if (this.fixedhead) {
+          this.$refs.header.scrollLeft = event.target.scrollLeft;
+        }
+        if (this.showleftcol) {
+          this.$refs.fixedLeftBody.scrollTop = event.target.scrollTop;
+        }
+        if (this.showrightcol) {
+          this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
+        }
+      },
+      // 取消选择
+      cancelSelect() {
+        for (var i in this.objData) {
+          this.objData[i]._selectSingleRow = false;
+        }
+      },     
+      handleClick(_index) {
+        if (!this.singleTable) {
+          return false;
+        }
+        this.cancelSelect();
+        this.objData[_index]._selectSingleRow = true;
+        this.objData = Object.assign({}, this.objData);
+        this.$emit('single-click', this, this.objData[_index]);
+      },
+      filterMultipeFunc(objData, index) {
+        var newArrs = [];
+        for(var i in objData) {
+          if(objData[i]._selectMultipleRow) {
+            newArrs.push(objData[i]);
+          }
+        }
+        return newArrs;
+      },
+      handleMultipe(_index) {
+        if (!this.multipleTable) {
+          return false;
+        }
+        if (this.objData[_index]._selectMultipleRow) {
+          this.objData[_index]._selectMultipleRow = false;
+        } else {
+          this.objData[_index]._selectMultipleRow = true;
+        }
+        var filterMultipe = this.filterMultipeFunc(this.objData);
+        this.$emit('multipe-click', this, filterMultipe);
       }
     }
   }
