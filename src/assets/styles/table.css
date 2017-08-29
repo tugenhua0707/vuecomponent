@@ -70,9 +70,6 @@ li {
 .tb-table th .cell {
   line-height: 30px;
 }
-.tb-table td .cell {
-  line-height: 24px;
-}
 .tb-table tr:hover,
 .tb-table tr.stripe:hover {
   background-color: #eef1f6;
@@ -163,7 +160,6 @@ li {
   left: auto;
   top: 0;
   box-shadow: -1px 0 8px #d3d4d6;
-/* 鼠标移动上去 变颜色*/
 }
 .tb-table-fixed-col-right .tb-table-fixed-head-wrapper,
 .tb-table-fixed-col-right .tb-table-fixed-body-wrapper {

@@ -172,7 +172,6 @@
           this.columnsheight = item.height;
         }
       });
-
       // 获取数组里面最大值
       var maxValue = Math.max.apply(null, widthArrs);
 
@@ -238,16 +237,6 @@
           }
         });
       }
-      // 如果固定列和表头时 设置bodyHeight 
-      if (this.fixedcol && this.fixedcol.length && this.fixedhead) {
-        this.bodyHeight = this.tableheight*1 - 1 - this.columnsheight*1 + 'px';
-        // 滚动条的高度貌似为15px 经过浏览器测试 ，再减去1px边框
-        this.leftheight = this.tableheight*1 - 15 - 1 + 'px';
-        this.rightheight = this.leftheight;
-
-        // fixed 内容的高度
-        this.fixedBodyHeight = this.tableheight*1 - 15 - 1 - this.columnsheight*1 + 'px';
-      }
     },
     computed: {
       classes () {
@@ -288,7 +277,24 @@
         return false;
       },
     },
-    mounted() {},
+    mounted() {
+      if (this.fixedcol && this.fixedcols.length) {
+        if (!this.fixedhead) {
+          // 当有左侧或者右侧固定的时候，那么左侧固定或右侧固定的高度 等于body的高度 + 40(th的高度为40) + 'px'
+          this.leftheight = this.$refs.body.offsetHeight + 40 + 'px';
+          this.rightheight = this.leftheight
+        } else {
+          // 如果固定列和表头时 设置bodyHeight 
+          
+          this.bodyHeight = this.tableheight*1 - 1 - this.columnsheight*1 + 'px';
+          // 滚动条的高度貌似为15px 经过浏览器测试 ，再减去1px边框
+          this.leftheight = this.tableheight*1 - 15 - 1 + 'px';
+          this.rightheight = this.leftheight;
+          // fixed 内容的高度
+          this.fixedBodyHeight = this.tableheight*1 - 15 - 1 - this.columnsheight*1 + 'px';
+        }
+      }
+    },
     methods: {
       makeData () {
         var data = [];
