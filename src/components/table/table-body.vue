@@ -15,9 +15,17 @@
         @click.stop="handleClick(row._index)"
       >
         <td v-for="(column, index) in columns" :height="columnsheight" :width="columnswidth[index]">
-          <div :class="['cell']" v-html="row[column.key]" v-if="column.type !== 'checkbox'" :style="{width: columnswidth[index] + 'px'}">{{row[column.key]}}</div>
-          <div :class="['cell']" v-if="column.type === 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">
-            <input type="checkbox" @click.stop="handleMultipe(row._index)"/>
+          <div>
+            <Cell
+              :row="row"
+              :column="column"
+              :index="row._index"
+              :columns-width="columnswidth"
+              :natural-index="index"
+            ></Cell>
+            <div :class="['cell']" v-if="column.type === 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">
+              <input type="checkbox" @click.stop="handleMultipe(row._index)"/>
+            </div>
           </div>
         </td>
       </tr>
@@ -31,9 +39,17 @@
       >
         <td v-for="(column, index) in columns" :class="(showcol*1) === index ? column.fixBody : 'hidden'" :width="columnswidth[index]" 
         :height="columnsheight">
-          <div :class="['cell']" v-html="row[column.key]" v-if="column.type !== 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">{{row[column.key]}}</div>
-          <div :class="['cell']" v-if="column.type === 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">
-            <input type="checkbox" @click.stop="handleMultipe(row._index)"/>
+          <div>
+            <Cell
+              :row="row"
+              :column="column"
+              :index="row._index"
+              :columns-width="columnswidth"
+              :natural-index="index"
+            ></Cell>
+            <div :class="['cell']" v-if="column.type === 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">
+              <input type="checkbox" @click.stop="handleMultipe(row._index)"/>
+            </div>
           </div>
         </td>
       </tr>
@@ -43,9 +59,12 @@
 
 <script>
   import Emitter from '../../mixins/emitter';
+  import Cell from './cell.vue';
+
   export default {
     name: 'TbTableBody',
     mixins: [ Emitter ],
+    components: { Cell },
     props: {
       prefixCls: {
         type: String
@@ -115,6 +134,9 @@
       },
       handleMultipe(_index) {
         this.$parent.handleMultipe(_index);
+      },
+      handleColumn(_index) {
+        this.$parent.handleColumn(_index);
       }
     },
     mounted () {
