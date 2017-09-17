@@ -16,6 +16,7 @@
       >
         <td v-for="(column, index) in columns" :height="columnsheight" :width="columnswidth[index]">
           <div>
+            <!--
             <Cell
               :row="row"
               :column="column"
@@ -23,6 +24,9 @@
               :columns-width="columnswidth"
               :natural-index="index"
             ></Cell>
+            -->
+            <div ref="cell" :class="['cell']" v-if="column.type !== 'checkbox'" :style="{width: columnsWidth[naturalIndex] + 'px'}"><slot></slot></div>
+
             <div :class="['cell']" v-if="column.type === 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">
               <input type="checkbox" @click.stop="handleMultipe(row._index)"/>
             </div>
@@ -40,6 +44,7 @@
         <td v-for="(column, index) in columns" :class="(showcol*1) === index ? column.fixBody : 'hidden'" :width="columnswidth[index]" 
         :height="columnsheight">
           <div>
+            <!--
             <Cell
               :row="row"
               :column="column"
@@ -47,6 +52,9 @@
               :columns-width="columnswidth"
               :natural-index="index"
             ></Cell>
+            -->
+            <div ref="cell" :class="['cell']" v-if="column.type !== 'checkbox'" :style="{width: columnsWidth[naturalIndex] + 'px'}"><slot></slot></div>
+
             <div :class="['cell']" v-if="column.type === 'checkbox'" :style="{width: columnswidth[index]+ 'px'}">
               <input type="checkbox" @click.stop="handleMultipe(row._index)"/>
             </div>
