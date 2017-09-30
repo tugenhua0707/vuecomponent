@@ -17,7 +17,8 @@ import Switchable from './components/switchable/switchable.vue';
 import SwitchableItem from './components/switchable/switchable-item.vue';
 import BackTop from './components/back-top/back-top.vue';
 import Table from './components/table/table.vue';
-
+import Table2 from './components/table2/table.vue';
+import TableColumn from './components/table2/table-column.vue';
 // import DropDown from './components/dropdown/dropdown.vue';
 /* import DropDownItem from './components/dropdown/dropdown-item.vue';
 import DropDownMenu from './components/dropdown/dropdown-menu.vue'; */
@@ -41,6 +42,8 @@ const iview = {
   'tb-switchable-item': SwitchableItem,
   'tb-backtop': BackTop,
   'tb-table': Table,
+  'tb-table2': Table2,
+  'tb-table-column': TableColumn,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu
@@ -75,6 +78,8 @@ export default {
   'tb-switchable-item': SwitchableItem,
   'tb-backtop': BackTop,
   'tb-table': Table,
+  'tb-table2': Table2,
+  'tb-table-column': TableColumn,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu

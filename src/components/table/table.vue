@@ -205,7 +205,7 @@
 
           this.showleftcol = true;
 
-        } else if(this.fixedcols[0]*1 === 1){
+        } else if(this.fixedcols[0]*1 === 1) {
           // 说明是右侧固定
           this.columns[this.columns.length - 1].fixHead = '';
           this.columns[this.columns.length - 1].fixBody = '';

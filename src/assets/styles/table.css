@@ -70,8 +70,7 @@ li {
 .tb-table th .cell {
   line-height: 30px;
 }
-.tb-table tr:hover,
-.tb-table tr.stripe:hover {
+.tb-table tr:hover {
   background-color: #eef1f6;
 }
 .tb-table-bottom-none {
@@ -80,10 +79,6 @@ li {
 /* 新增类名 */
 .bgColor {
   background-color: #eef1f6 !important;
-}
-/* 带斑马纹表格 */
-.tb-table tr.stripe {
-  background-color: #fafafa;
 }
 /* 带边框的表格 */
 .tb-table-border td,
@@ -106,13 +101,8 @@ li {
   width: 15px;
 }
 .tb-table-fixed-head {
-  height: 300px;
   border-bottom: 1px solid #dfe6ec;
   overflow: hidden;
-}
-.tb-table-fixed-head .tb-table-body-wrapper {
-  height: 259px;
-  overflow: auto;
 }
 /* 固定列 */
 .tb-table-fixed-col {
@@ -194,4 +184,23 @@ li {
 /*  单选 */
 .tb-table-select-single .current-row td {
   background: #edf7ff;
+}
+
+
+/* 重构新增的css  */
+.tb-table th, .tb-table tr{
+  height: 40px;
+}
+.tb-table tr .cell {
+  padding-right: 8px;
+}
+/* 带斑马纹表格 */
+.tb-table-stripe tr:nth-child(2n) {
+  background-color: #fafafa;
+}
+.tb-table-stripe tr:nth-child(2n):hover {
+  background-color: #eef1f6;
+}
+.tb-table-fixed-head .tb-table-body-wrapper tr:last-child td {
+  border-bottom: none;
 }
