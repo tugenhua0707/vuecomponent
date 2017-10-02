@@ -204,3 +204,9 @@ li {
 .tb-table-fixed-head .tb-table-body-wrapper tr:last-child td {
   border-bottom: none;
 }
+.tb-table-body-wrapper {
+  overflow: auto;
+}
+.tb-table-fixed-head .tb-table-head-wrapper {
+  overflow: hidden;
+}

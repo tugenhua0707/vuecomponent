@@ -5,25 +5,23 @@
     :class="{
       'tb-table-border': border,
       'tb-table-stripe': stripe,
-      'tb-table-fixed-head': height
+      'tb-table-fixed-head': height || fixedColumnsLeft.length > 0 || fixedColumnsRight > 0
     }"
   >
-    <div :class="{
-      'tb-table-fixed-col': fixedColumns.length > 0}">
+    <div>
       <div class="tb-table-head-wrapper" ref="headWrapper">
         <tb-table-column
           :columns="tableColumns"
           :fixed-head="height"
           :columns-width="columnswidth">
-          <slot></slot>
         </tb-table-column>
       </div>
       <div 
         class="tb-table-body-wrapper" 
         ref="bodyWrapper" 
+        @scroll="handleBodyScroll"
         :style="{
-          height: bodyHeight, 
-          width: bodyWidth,
+          height: bodyHeight,
           'overflow': height ? 'auto' : ''
         }">
         <tableBody
@@ -35,16 +33,25 @@
         </tableBody>
       </div>
     </div>
-    <div class="tb-table-fixed-col-left">
-      <div class="tb-table-fixed-head-wrapper" ref="fixedHeadWrapper">
+    <div 
+      class="tb-table-fixed-col-left" 
+      v-if="fixedColumnsLeft.length > 0" 
+      :style="{
+        width: fixedLeftWidth + 'px',
+        height: fixedHeight + 'px'
+      }">
+      <div class="tb-table-fixed-head-wrapper">
         <tb-table-column
           :columns="tableColumns"
           :fixed-head="height"
           :columns-width="columnswidth">
-          <slot></slot>
         </tb-table-column>
       </div>
-      <div class="tb-table-fixed-body-wrapper" ref="fixedBodyWrapper">
+      <div 
+        class="tb-table-fixed-body-wrapper" 
+        ref="fixedLeftBody"
+        :style="{height: fixedBodyHeight + 'px'}"
+      >
         <tableBody
           :data="data"
           :columns="tableColumns"
@@ -53,6 +60,41 @@
         >
         </tableBody>
       </div>
+    </div>
+    <div 
+      class="tb-table-fixed-col-right" 
+      v-if="fixedColumnsRight.length > 0"
+      :style="{
+        width: fixedRightWidth + 'px',
+        height: fixedHeight + 'px'
+      }"
+    >
+      <div class="tb-table-fixed-head-wrapper">
+        <tb-table-column
+          :columns="tableColumns"
+          :fixed-head="height"
+          :columns-width="columnswidth">
+          <slot name="empty"></slot>
+        </tb-table-column>
+      </div>
+      <div 
+        class="tb-table-fixed-body-wrapper" 
+        ref="fixedRightBody"
+        :style="{height: fixedBodyHeight + 'px'}"
+      >
+        <tableBody
+          :data="data"
+          :columns="tableColumns"
+          :row-class-name="rowClassName"
+          :columns-width="columnswidth"
+        >
+        </tableBody>
+      </div>
+    </div>
+    <div 
+      class="tb-table-fixed-right-patch" 
+      v-if="fixedColumnsLeft.length > 0 || fixedColumnsRight > 0"
+      :style="{width: '14px', height: '40px'}">
     </div>
   </div>
 </template>
@@ -89,9 +131,14 @@
       return {
         tableColumns: [],
         bodyHeight: '',
-        bodyWidth: '',
         columnswidth: [],
-        fixedColumns: [],     // 保存固定的列  保存的是索引值 0 代表的是 最左列，1 代表的是第二列 ....依次类推
+        fixedColumnsLeft: [],     // 保存最左侧列，比如 fixed 或 fixed='left'
+        fixedColumnsRight: [],    // 保存最右侧列，比如 fixed = 'right'
+        fixedLeftWidth: 0,        // 左侧固定列的宽度
+        fixedRightWidth: 0,       // 右侧固定列的宽度
+        fixedHeight: 0,           // 固定列的高度
+        fixedBodyHeight: 'auto',  // 固定列的body的高度
+
       }
     },
     beforeMount() {
@@ -102,7 +149,6 @@
       
     },
     mounted() {
-      console.log(this.fixedColumns)
       if (this.height) {
         this.getBodyHeight();
       }
@@ -122,14 +168,31 @@
           for (var f = 0, flen = filterArrs.length; f < flen; f++) {
             var item = filterArrs[f];
             var propsData = item.data.attrs;
+            // 保存hover的属性
+            propsData.isHover = false;
             this.tableColumns.push(propsData);
             widthArrs.push(propsData.width);
-            if (propsData.fixed === '') {
-              this.fixedColumns.push(f);
+            if (propsData.fixed === '' || propsData.fixed === 'left') {
+              this.fixedColumnsLeft.push(propsData);
+            }
+            if (propsData.fixed === 'right') {
+              this.fixedColumnsRight.push(propsData);
             }
           }
         }
-        // this.height 有的话 是固定头部的含义
+        // 对固定列重新排序
+        if (this.fixedColumnsLeft.length > 0 || this.fixedColumnsRight.length > 0) {
+          this.fixedColSort();
+        }
+        // 固定头部
+        this.fixedHead(widthArrs);
+      },
+      getBodyHeight() {
+        // 总高度 - 头部的高度 - 1(低边框为1px)
+        this.bodyHeight = this.height - this.$refs.headWrapper.offsetHeight - 1 + 'px';
+      },
+      // 固定头部
+      fixedHead(widthArrs) {
         if (this.height) {
           // 获取数组里面最大值
           var maxValue = Math.max.apply(null, widthArrs);
@@ -142,9 +205,87 @@
           this.columnswidth = widthArrs;
         }
       },
-      getBodyHeight() {
-        // 总高度 - 头部的高度 - 1(低边框为1px)
-        this.bodyHeight = this.height - this.$refs.headWrapper.offsetHeight - 1 + 'px';
+      fixedColSort() {
+        var self = this;
+        var fixedColumnsLeft = this.fixedColumnsLeft;
+        var fixedColumnsRight = this.fixedColumnsRight;
+        /*
+         * 1. 对固定左侧元素重新排序，从后面遍历，依次插入到数组的最前面去。这样就保证了先后顺序
+         * 比如原数组 [1,3,5,6,7,8，9]    this.fixedColumnsLeft = [1, 5]
+         * 那么先从5遍历，然后依次到1，然后使用数组的unshift方法 向数组的开头添加元素，且原数组对应的项删除掉，这样就组成了新数组
+         * newArrs = [1, 5, 3, 6, 7, 8, 9]
+           2. 同理对固定在右侧的元素重新排序，比如 this.fixedColumnsRight = [7, 8], 先在原数组中删除对应的项，然后使用push方法，依次从头到尾循环 右侧固定的列
+           依次往后面插入元素，最后新数组就变成 newArrs = [1, 5, 3, 6, 9, 7, 8]
+         */
+        // 对固定左侧的元素 进行重新排序
+        var leftRightSort = function(arrs, type) {
+          var tableColumns = self.tableColumns;
+          // 获取固定的高度
+          if (!self.height) {
+            // 如果没有固定头部的话，css已经写了每行的高度是40px，因此 总高度 = (多少行+头部的40px) * 40;
+            self.fixedHeight = (self.data.length+1) * 40; 
+          } else {
+            // 如果头部和列都固定的话， 那么它的高度 = 表格的高度 - 14(底部滚动条的高度)
+            self.fixedHeight = self.height - 14;
+          }
+          if (type === 'left') {
+            // 对左侧排序
+            for (var j = arrs.length - 1; j >= 0; j--) {
+              for(var i = 0, ilen = tableColumns.length; i < ilen; i++) {
+                if (tableColumns[i].label == arrs[j].label) {
+                  self.tableColumns.splice(i, 1);
+                  self.tableColumns.unshift(arrs[j]);
+                  self.fixedLeftWidth += arrs[j].width - 1;
+                  break;
+                }
+              }
+            }
+          } else if (type === 'right') {
+            // 对右侧排序
+            for (var m = arrs.length - 1; m >= 0; m--) {
+              for(var n = 0, nlen = tableColumns.length; n < nlen; n++) {
+                if (tableColumns[n].label == arrs[m].label) {
+                  self.tableColumns.splice(n, 1);
+                  self.tableColumns.push(arrs[m]);
+                  self.fixedRightWidth += arrs[m].width - 1;
+                  break;
+                }
+              }
+            }
+          }
+        };
+        // 对固定左侧的元素 进行重新排序
+        if (fixedColumnsLeft.length > 0) {
+          leftRightSort(fixedColumnsLeft, 'left');
+        }
+        // 对固定右侧的元素 进行重新排序
+        if (fixedColumnsRight.length > 0) {
+          leftRightSort(fixedColumnsRight, 'right');
+        }
+        // 固定列的body的高度 = table的总高度 - 头部的head的高度 - 1px边框 
+        self.fixedBodyHeight = self.fixedHeight - 40 - 1;
+      },
+      handleBodyScroll(event) {
+        if (this.fixedColumnsLeft.length || this.fixedColumnsRight.length) {
+          this.$refs.headWrapper.scrollLeft = event.target.scrollLeft;
+        }
+        if (this.fixedColumnsLeft.length) {
+          this.$refs.fixedLeftBody.scrollTop = event.target.scrollTop;
+        }
+        if (this.fixedColumnsRight.length) {
+          this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
+        }
+      },
+      handleMouseIn(index) {
+        if (this.tableColumns[index].isHover) {
+          return;
+        }
+        this.tableColumns[index].isHover = true;
+        this.tableColumns = Object.assign({}, this.tableColumns);
+      },
+      handleMouseOut(index) {
+        this.tableColumns[index].isHover = false;
+        this.tableColumns = Object.assign({}, this.tableColumns);
       }
     }
   }

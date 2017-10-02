@@ -110,15 +110,63 @@
       </tb-table-column>
     </tb-table2>
 
-    <h3>固定列</h3>
+    <h3>固定列--随意固定任何一列和多列，只能固定在左侧或右侧</h3>
     <tb-table2
       :data="tableData3"
       border
       style="width: 100%">
       <tb-table-column
-        fixed
         prop="date"
         label="日期"
+        width="150">
+      </tb-table-column>
+      <tb-table-column
+        prop="name"
+        label="姓名"
+        width="120">
+      </tb-table-column>
+      <tb-table-column
+        prop="province"
+        label="省份"
+        width="120">
+      </tb-table-column>
+      <tb-table-column
+        prop="city"
+        label="市区"
+        width="120">
+      </tb-table-column>
+      <tb-table-column
+        prop="address"
+        label="地址"
+        fixed="right"
+        width="300">
+      </tb-table-column>
+      <tb-table-column
+        fixed
+        prop="zip"
+        label="邮编"
+        width="120">
+      </tb-table-column>
+      <tb-table-column
+        label="操作"
+        width="100">
+        <div>
+          <span @click="handleClick(scope.row)">查看</span>
+          <span @click="handleClick(scope.row)">编辑</span>
+        </div>
+      </tb-table-column>
+    </tb-table2>
+
+    <h3>固定头部列</h3>
+    <tb-table2
+      :data="tableData4"
+      border
+      height="250"
+      style="width: 100%">
+      <tb-table-column
+        prop="date"
+        label="日期"
+        fixed
         width="150">
       </tb-table-column>
       <tb-table-column
@@ -142,13 +190,11 @@
         width="300">
       </tb-table-column>
       <tb-table-column
-        fixed
         prop="zip"
         label="邮编"
         width="120">
       </tb-table-column>
       <tb-table-column
-        fixed="right"
         label="操作"
         width="100">
         <template scope="scope">
@@ -157,6 +203,7 @@
         </template>
       </tb-table-column>
     </tb-table2>
+
   </div>
 </template>
 <style>
@@ -276,6 +323,64 @@
               address: '上海市普陀区金沙江路 1518 弄',
               zip: 200333
             }, 
+            {
+              date: '2016-05-01',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            }
+          ],
+          tableData4: [
+            {
+              date: '2016-05-03',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            }, 
+            {
+              date: '2016-05-02',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            }, 
+            {
+              date: '2016-05-04',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            }, 
+            {
+              date: '2016-05-01',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            },
+            {
+              date: '2016-05-01',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            },
+            {
+              date: '2016-05-01',
+              name: '王小虎',
+              province: '上海',
+              city: '普陀区',
+              address: '上海市普陀区金沙江路 1518 弄',
+              zip: 200333
+            },
             {
               date: '2016-05-01',
               name: '王小虎',

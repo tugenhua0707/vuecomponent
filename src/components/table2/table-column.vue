@@ -24,7 +24,7 @@
     mixins: [ Emitter ],
     props: {
       columns: {
-        type: Array,
+        type: [Array, Object],
         required: true
       },
       fixedHead: String,
@@ -48,7 +48,7 @@
 
     },
     mounted() {
-
+      console.log(this)
     },
     beforeMount() {
       

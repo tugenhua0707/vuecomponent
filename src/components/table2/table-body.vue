@@ -9,8 +9,15 @@
       <tr 
         v-for="(row, index) in data"
         :class="getRowClass(row, index)"
+        @mouseenter.stop="handleMouseIn(index)"
+        @mouseleave.stop="handleMouseOut(index)"
       >
-        <td v-for="(column, index) in columns">
+        <td 
+          v-for="(column, _index) in columns"
+          :class="{
+            'bgColor': columns[index] && columns[index].isHover
+          }"
+        >
           <div class="cell" :style="{width: column.width}">{{row[column.prop]}}</div>
         </td>
       </tr>
@@ -29,7 +36,7 @@
         required: true
       },
       columns: {
-        type: Array,
+        type: [Array, Object],
         required: true
       },
       stripe: {
@@ -57,6 +64,12 @@
           rets.push(rowClassName.call(null, row, index) || '');
         }
         return rets.join(' ');
+      },
+      handleMouseIn(index) {
+        this.$parent.handleMouseIn(index);
+      },
+      handleMouseOut(index) {
+        this.$parent.handleMouseOut(index);
       }
     },
     mounted () {
