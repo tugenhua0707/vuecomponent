@@ -210,3 +210,8 @@ li {
 .tb-table-fixed-head .tb-table-head-wrapper {
   overflow: hidden;
 }
+.tb-table .hidden-columns {
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+}

@@ -18,7 +18,7 @@ import SwitchableItem from './components/switchable/switchable-item.vue';
 import BackTop from './components/back-top/back-top.vue';
 import Table from './components/table/table.vue';
 import Table2 from './components/table2/table.vue';
-import TableColumn from './components/table2/table-column.vue';
+import TableColumn from './components/table-column/table-column.vue';
 // import DropDown from './components/dropdown/dropdown.vue';
 /* import DropDownItem from './components/dropdown/dropdown-item.vue';
 import DropDownMenu from './components/dropdown/dropdown-menu.vue'; */

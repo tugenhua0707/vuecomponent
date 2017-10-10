@@ -1,5 +1,6 @@
 <template>
   <div style="width: 800px;">
+    <!--
     <h3>基础表格</h3>
     <tb-table2
       :data="tableData"
@@ -109,7 +110,7 @@
         width="400">
       </tb-table-column>
     </tb-table2>
-
+    -->
     <h3>固定列--随意固定任何一列和多列，只能固定在左侧或右侧</h3>
     <tb-table2
       :data="tableData3"
@@ -149,11 +150,12 @@
       </tb-table-column>
       <tb-table-column
         label="操作"
+        fixed
         width="100">
-        <div>
+        <template scope="scope">
           <span @click="handleClick(scope.row)">查看</span>
           <span @click="handleClick(scope.row)">编辑</span>
-        </div>
+        </template>
       </tb-table-column>
     </tb-table2>
 
@@ -203,7 +205,6 @@
         </template>
       </tb-table-column>
     </tb-table2>
-
   </div>
 </template>
 <style>
@@ -400,6 +401,9 @@
             return 'positive-row';
           }
           return '';
+        },
+        handleClick() {
+          alert(222)
         }
       }
     }

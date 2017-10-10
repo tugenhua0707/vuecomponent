@@ -8,13 +8,14 @@
       'tb-table-fixed-head': height || fixedColumnsLeft.length > 0 || fixedColumnsRight > 0
     }"
   >
+    <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
     <div>
       <div class="tb-table-head-wrapper" ref="headWrapper">
-        <tb-table-column
+        <tableHead
           :columns="tableColumns"
           :fixed-head="height"
           :columns-width="columnswidth">
-        </tb-table-column>
+        </tableHead>
       </div>
       <div 
         class="tb-table-body-wrapper" 
@@ -29,6 +30,7 @@
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
+          :isFixedLeftRight="isFixedLeftRight"
         >
         </tableBody>
       </div>
@@ -41,11 +43,11 @@
         height: fixedHeight + 'px'
       }">
       <div class="tb-table-fixed-head-wrapper">
-        <tb-table-column
+        <tableHead
           :columns="tableColumns"
           :fixed-head="height"
           :columns-width="columnswidth">
-        </tb-table-column>
+        </tableHead>
       </div>
       <div 
         class="tb-table-fixed-body-wrapper" 
@@ -57,6 +59,7 @@
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
+          :isFixedLeftRight="isFixedLeftRight"
         >
         </tableBody>
       </div>
@@ -70,12 +73,11 @@
       }"
     >
       <div class="tb-table-fixed-head-wrapper">
-        <tb-table-column
+        <tableHead
           :columns="tableColumns"
           :fixed-head="height"
           :columns-width="columnswidth">
-          <slot name="empty"></slot>
-        </tb-table-column>
+        </tableHead>
       </div>
       <div 
         class="tb-table-fixed-body-wrapper" 
@@ -87,6 +89,7 @@
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
+          :isFixedLeftRight="isFixedLeftRight"
         >
         </tableBody>
       </div>
@@ -102,10 +105,11 @@
 <script>
   import Emitter from '../../mixins/emitter';
   import tableBody from './table-body.vue';
+  import tableHead from './table-head.vue';
   export default {
     name: 'TbTable',
     mixins: [ Emitter ],
-    components: {tableBody},
+    components: {tableBody, tableHead},
     props: {
       data: {
         type: Array,
@@ -132,13 +136,13 @@
         tableColumns: [],
         bodyHeight: '',
         columnswidth: [],
-        fixedColumnsLeft: [],     // 保存最左侧列，比如 fixed 或 fixed='left'
-        fixedColumnsRight: [],    // 保存最右侧列，比如 fixed = 'right'
-        fixedLeftWidth: 0,        // 左侧固定列的宽度
-        fixedRightWidth: 0,       // 右侧固定列的宽度
-        fixedHeight: 0,           // 固定列的高度
-        fixedBodyHeight: 'auto',  // 固定列的body的高度
-
+        fixedColumnsLeft: [],       // 保存最左侧列，比如 fixed 或 fixed='left'
+        fixedColumnsRight: [],      // 保存最右侧列，比如 fixed = 'right'
+        fixedLeftWidth: 0,          // 左侧固定列的宽度
+        fixedRightWidth: 0,         // 右侧固定列的宽度
+        fixedHeight: 0,             // 固定列的高度
+        fixedBodyHeight: 'auto',    // 固定列的body的高度
+        isFixedLeftRight: false,    // 是否固定左侧或右侧 通过该参数判断是否手动移动上去 是否变色
       }
     },
     beforeMount() {
@@ -183,6 +187,7 @@
         // 对固定列重新排序
         if (this.fixedColumnsLeft.length > 0 || this.fixedColumnsRight.length > 0) {
           this.fixedColSort();
+          this.isFixedLeftRight = true;
         }
         // 固定头部
         this.fixedHead(widthArrs);
@@ -277,9 +282,6 @@
         }
       },
       handleMouseIn(index) {
-        if (this.tableColumns[index].isHover) {
-          return;
-        }
         this.tableColumns[index].isHover = true;
         this.tableColumns = Object.assign({}, this.tableColumns);
       },

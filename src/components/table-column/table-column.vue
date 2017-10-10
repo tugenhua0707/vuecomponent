@@ -1,6 +1,8 @@
 
 <template>
-  <slot></slot>
+  <div>
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -13,16 +15,19 @@
     },
     data() {
       return {
-
+        columns: []
       }
     },
     beforeMount() {
       
     },
     mounted() {
-      console.log(this);
+      
     },
     created() {
+
+    },
+    methods: {
       
     }
   }

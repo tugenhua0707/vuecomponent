@@ -14,6 +14,9 @@
     },
     computed: {
 
+    },
+    mounted() {
+      console.log('switchable')
     }
   }
 </script>

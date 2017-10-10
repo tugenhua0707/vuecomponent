@@ -278,6 +278,8 @@
       },
     },
     mounted() {
+      console.log(this);
+      
       if (this.fixedcol && this.fixedcols.length) {
         if (!this.fixedhead) {
           // 当有左侧或者右侧固定的时候，那么左侧固定或右侧固定的高度 等于body的高度 + 40(th的高度为40) + 'px'
