@@ -1,6 +1,5 @@
 <template>
   <div style="width: 800px;">
-    <!--
     <h3>基础表格</h3>
     <tb-table2
       :data="tableData"
@@ -110,7 +109,6 @@
         width="400">
       </tb-table-column>
     </tb-table2>
-    -->
     <h3>固定列--随意固定任何一列和多列，只能固定在左侧或右侧</h3>
     <tb-table2
       :data="tableData3"
@@ -142,7 +140,7 @@
         width="300">
       </tb-table-column>
       <tb-table-column
-        fixed="right"
+        fixed
         prop="zip"
         label="邮编"
         width="120">
@@ -195,6 +193,7 @@
       <tb-table-column
         prop="zip"
         label="邮编"
+        fixed="right"
         width="120">
       </tb-table-column>
       <tb-table-column
