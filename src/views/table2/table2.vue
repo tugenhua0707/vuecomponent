@@ -139,22 +139,23 @@
       <tb-table-column
         prop="address"
         label="地址"
-        fixed="right"
         width="300">
       </tb-table-column>
       <tb-table-column
-        fixed
+        fixed="right"
         prop="zip"
         label="邮编"
         width="120">
       </tb-table-column>
       <tb-table-column
         label="操作"
-        fixed
+        fixed="right"
         width="100">
         <template scope="scope">
-          <span @click="handleClick(scope.row)">查看</span>
-          <span @click="handleClick(scope.row)">编辑</span>
+          <div v-for="(item, index) in tableData3" class="item">
+            <span @click="handleClick(item, index)">查看</span>
+            <span @click="handleClick(item, index)">编辑</span>
+          </div>
         </template>
       </tb-table-column>
     </tb-table2>
@@ -198,10 +199,13 @@
       </tb-table-column>
       <tb-table-column
         label="操作"
+        fixed="right"
         width="100">
         <template scope="scope">
-          <span @click="handleClick(scope.row)">查看</span>
-          <span @click="handleClick(scope.row)">编辑</span>
+          <div v-for="(item, index) in tableData4" class="item">
+            <span @click="handleClick(item, index)">查看</span>
+            <span @click="handleClick(item, index)">编辑</span>
+          </div>
         </template>
       </tb-table-column>
     </tb-table2>
@@ -402,8 +406,9 @@
           }
           return '';
         },
-        handleClick() {
-          alert(222)
+        handleClick(item, index) {
+          console.log(item);
+          console.log(index);
         }
       }
     }

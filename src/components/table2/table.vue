@@ -8,7 +8,17 @@
       'tb-table-fixed-head': height || fixedColumnsLeft.length > 0 || fixedColumnsRight > 0
     }"
   >
-    <div class="hidden-columns" ref="hiddenColumns"><slot></slot></div>
+    <div 
+      class="hidden-columns" 
+      ref="hiddenColumns"
+      :style="{
+        width: rightColWidth + 'px',
+        height: fixedBodyHeight + 'px',
+        visibility: isRightCol ? 'visible' : 'hidden',
+        zIndex: isRightCol ? '10' : '-1',
+        right: height > 0 ? '14px' : '0'
+      }"
+    ><slot></slot></div>
     <div>
       <div class="tb-table-head-wrapper" ref="headWrapper">
         <tableHead
@@ -69,10 +79,16 @@
       v-if="fixedColumnsRight.length > 0"
       :style="{
         width: fixedRightWidth + 'px',
-        height: fixedHeight + 'px'
+        height: fixedHeight + 'px',
+        right: (fixedColumnsRight.length > 0 && height > 0) ? '14px' : 0
       }"
     >
-      <div class="tb-table-fixed-head-wrapper">
+      <div 
+        class="tb-table-fixed-head-wrapper"
+        :style="{
+          right: (fixedColumnsRight.length > 0 && height > 0) ? '-14px' : 0
+        }"
+      >
         <tableHead
           :columns="tableColumns"
           :fixed-head="height"
@@ -96,8 +112,8 @@
     </div>
     <div 
       class="tb-table-fixed-right-patch" 
-      v-if="fixedColumnsLeft.length > 0 || fixedColumnsRight > 0"
-      :style="{width: '14px', height: '40px'}">
+      v-if="height > 0"
+      :style="{width: '13px', height: '40px'}">
     </div>
   </div>
 </template>
@@ -108,8 +124,9 @@
   import tableHead from './table-head.vue';
   export default {
     name: 'TbTable',
-    mixins: [ Emitter ],
-    components: {tableBody, tableHead},
+    componentName: 'TbTable',
+    mixins: [Emitter],
+    components: { tableBody, tableHead },
     props: {
       data: {
         type: Array,
@@ -129,20 +146,22 @@
       rowClassName: [String, Function],
 
       // 固定表头而设置
-      height: [String, Number],
+      height: [String, Number]
     },
     data() {
       return {
         tableColumns: [],
         bodyHeight: '',
         columnswidth: [],
-        fixedColumnsLeft: [],       // 保存最左侧列，比如 fixed 或 fixed='left'
-        fixedColumnsRight: [],      // 保存最右侧列，比如 fixed = 'right'
-        fixedLeftWidth: 0,          // 左侧固定列的宽度
-        fixedRightWidth: 0,         // 右侧固定列的宽度
-        fixedHeight: 0,             // 固定列的高度
-        fixedBodyHeight: 'auto',    // 固定列的body的高度
-        isFixedLeftRight: false,    // 是否固定左侧或右侧 通过该参数判断是否手动移动上去 是否变色
+        fixedColumnsLeft: [], // 保存最左侧列，比如 fixed 或 fixed='left'
+        fixedColumnsRight: [], // 保存最右侧列，比如 fixed = 'right'
+        fixedLeftWidth: 0, // 左侧固定列的宽度
+        fixedRightWidth: 0, // 右侧固定列的宽度
+        fixedHeight: 0, // 固定列的高度
+        fixedBodyHeight: 'auto', // 固定列的body的高度
+        isFixedLeftRight: false, // 是否固定左侧或右侧 通过该参数判断是否手动移动上去 是否变色
+        isRightCol:  false,      // 右侧操作是否固定 操作只能右侧固定，不能不固定或左侧固定(因为操作数据是定位上去的)
+        rightColWidth: '0',   // 右侧固定的宽度，默认为0
       }
     },
     beforeMount() {
@@ -204,7 +223,7 @@
           // 获取数组最大值的索引
           var maxIndex = widthArrs.indexOf(maxValue.toString());
           // 最大值的宽度 需要减去 15， 因为需要包括纵向滚动条的宽度
-          var resetMaxValue = maxValue*1 - 15 - 1;
+          var resetMaxValue = maxValue * 1 - 15 - 1;
           // 最后重新设置数组的宽度
           widthArrs[maxIndex] = resetMaxValue.toString();
           this.columnswidth = widthArrs;
@@ -223,21 +242,21 @@
            依次往后面插入元素，最后新数组就变成 newArrs = [1, 5, 3, 6, 9, 7, 8]
          */
         // 对固定左侧的元素 进行重新排序
-        var leftRightSort = function(arrs, type) {
+        var leftRightSort = function (arrs, type) {
           var tableColumns = self.tableColumns;
           // 获取固定的高度
           if (!self.height) {
-            // 如果没有固定头部的话，css已经写了每行的高度是40px，因此 总高度 = (多少行+头部的40px) * 40;
-            self.fixedHeight = (self.data.length+1) * 40; 
+            // 如果没有固定头部的话，css已经写了每行的高度是40px，因此 总高度 = (多少行+头部的40px) * 40 - 1px(边框);
+            self.fixedHeight = (self.data.length + 1) * 40 - 1;
           } else {
-            // 如果头部和列都固定的话， 那么它的高度 = 表格的高度 - 14(底部滚动条的高度)
-            self.fixedHeight = self.height - 14;
+            // 如果头部和列都固定的话， 那么它的高度 = 表格的高度 - 14(底部滚动条的高度) - 1px(边框)
+            self.fixedHeight = self.height - 14 - 1;
           }
           if (type === 'left') {
             // 对左侧排序
             for (var j = arrs.length - 1; j >= 0; j--) {
-              for(var i = 0, ilen = tableColumns.length; i < ilen; i++) {
-                if (tableColumns[i].label == arrs[j].label) {
+              for (var i = 0, ilen = tableColumns.length; i < ilen; i++) {
+                if (tableColumns[i].label === arrs[j].label) {
                   self.tableColumns.splice(i, 1);
                   self.tableColumns.unshift(arrs[j]);
                   self.fixedLeftWidth += arrs[j].width - 1;
@@ -247,9 +266,13 @@
             }
           } else if (type === 'right') {
             // 对右侧排序
-            for (var m = arrs.length - 1; m >= 0; m--) {
-              for(var n = 0, nlen = tableColumns.length; n < nlen; n++) {
-                if (tableColumns[n].label == arrs[m].label) {
+            for (var m = 0; m < arrs.length; m++) {
+              for (var n = 0, nlen = tableColumns.length; n < nlen; n++) {
+                if (tableColumns[n].label === arrs[m].label) {
+                  if (!arrs[m].prop) {
+                    self.isRightCol = true;
+                    self.rightColWidth = arrs[m].width;
+                  }
                   self.tableColumns.splice(n, 1);
                   self.tableColumns.push(arrs[m]);
                   self.fixedRightWidth += arrs[m].width - 1;
@@ -279,6 +302,7 @@
         }
         if (this.fixedColumnsRight.length) {
           this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
+          this.$refs.hiddenColumns.scrollTop = event.target.scrollTop;
         }
       },
       handleMouseIn(index) {

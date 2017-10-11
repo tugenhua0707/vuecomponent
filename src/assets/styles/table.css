@@ -207,11 +207,19 @@ li {
 .tb-table-body-wrapper {
   overflow: auto;
 }
-.tb-table-fixed-head .tb-table-head-wrapper {
+.tb-table-head-wrapper {
   overflow: hidden;
 }
 .tb-table .hidden-columns {
   visibility: hidden;
   position: absolute;
+  top: 40px;
+  right: 0px;
   z-index: -1;
+  overflow: hidden;
+}
+.tb-table .hidden-columns .item {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
 }

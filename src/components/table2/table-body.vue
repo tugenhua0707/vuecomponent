@@ -18,11 +18,7 @@
             'bgColor': columns[index] && columns[index].isHover
           }"
         >
-          <cellData 
-            :row="row" 
-            :column="column"
-            :ihtml="saveHTML"
-          ></cellData>
+          <cellData :row="row" :column="column"></cellData>
         </td>
       </tr>
     </tbody>
@@ -34,8 +30,8 @@
   import cellData from './cell-data.vue';
   export default {
     name: 'TbTableBody',
-    mixins: [ Emitter ],
-    components: {cellData},
+    mixins: [Emitter],
+    components: { cellData },
     props: {
       data: {
         type: Array,
@@ -55,17 +51,11 @@
     },
     data() {
       return {
-        saveHTML: []
+        
       }
     },
     beforeMount() {
-      var self = this;
-      var childs = this.$parent.$refs.hiddenColumns.children;
-      [].slice.call(childs).forEach(function(child, index){
-        if (child.children && child.children.length) {
-          self.saveHTML[index] = child.innerHTML;
-        }
-      });
+      
     },
     methods: {
       getRowClass(row, index) {
