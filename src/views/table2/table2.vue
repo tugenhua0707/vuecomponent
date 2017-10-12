@@ -269,7 +269,6 @@
         <template scope="scope">
           <div v-for="(item, index) in tableData2" class="item">
             <span @click="handleClick(item, index)">查看</span>
-            <span @click="handleClick(item, index)">编辑</span>
           </div>
         </template>
       </tb-table-column>

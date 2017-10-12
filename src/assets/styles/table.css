@@ -219,7 +219,7 @@ li {
   overflow: hidden;
 }
 .tb-table .hidden-columns .item {
-  text-align: center;
+  padding-left: 20px;
 }
 .tb-table .hidden-columns .item span {
   cursor: pointer;

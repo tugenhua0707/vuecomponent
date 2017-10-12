@@ -37,7 +37,7 @@
         }">
         <tableBody
           ref="tbodyWrapper"
-          :data="data"
+          :data="objData"
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
@@ -66,7 +66,7 @@
         :style="{height: fixedBodyHeight + 'px'}"
       >
         <tableBody
-          :data="data"
+          :data="objData"
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
@@ -102,7 +102,7 @@
         :style="{height: fixedBodyHeight + 'px'}"
       >
         <tableBody
-          :data="data"
+          :data="objData"
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
@@ -183,7 +183,9 @@
         rightColWidth: '0',
 
         /* 保存操作固定列的字段 */
-        columnsElem: [],      
+        columnsElem: [],  
+
+        objData: this.makeData()    
       }
     },
     beforeMount() {
@@ -226,6 +228,14 @@
       });
     },
     methods: {
+      makeData() {
+        var data = [];
+        this.data.forEach((row, index) => {
+          row._index = index;
+          data[index] = row;
+        });
+        return data;
+      },
       // 获取table列表的字段
       getListColumns() {
         var widthArrs = [];
@@ -240,8 +250,6 @@
           for (var f = 0, flen = filterArrs.length; f < flen; f++) {
             var item = filterArrs[f];
             var propsData = item.data.attrs;
-            // 保存hover的属性
-            propsData.isHover = false;
             this.tableColumns.push(propsData);
             widthArrs.push(propsData.width);
             if (propsData.fixed === '' || propsData.fixed === 'left') {
@@ -343,12 +351,12 @@
         }
       },
       handleMouseIn(index) {
-        this.tableColumns[index].isHover = true;
-        this.tableColumns = Object.assign({}, this.tableColumns);
+        this.objData[index].isHover = true;
+        this.objData = Object.assign({}, this.objData);
       },
       handleMouseOut(index) {
-        this.tableColumns[index].isHover = false;
-        this.tableColumns = Object.assign({}, this.tableColumns);
+        this.objData[index].isHover = false;
+        this.objData = Object.assign({}, this.objData);
       }
     }
   }

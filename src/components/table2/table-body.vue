@@ -9,13 +9,13 @@
       <tr 
         v-for="(row, index) in data"
         :class="getRowClass(row, index)"
-        @mouseenter.stop="handleMouseIn(index)"
-        @mouseleave.stop="handleMouseOut(index)"
+        @mouseenter.stop="handleMouseIn(row._index)"
+        @mouseleave.stop="handleMouseOut(row._index)"
       >
         <td 
           v-for="(column, _index) in columns"
           :class="{
-            'bgColor': columns[index] && columns[index].isHover
+            'bgColor': data[index] && data[index].isHover
           }"
         >
           <cellData :row="row" :column="column"></cellData>
@@ -34,7 +34,7 @@
     components: { cellData },
     props: {
       data: {
-        type: Array,
+        type: [Array, Object],
         required: true
       },
       columns: {
@@ -80,7 +80,7 @@
       }
     },
     mounted () {
-      
+
     }
   }
 </script>
