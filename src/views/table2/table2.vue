@@ -140,7 +140,6 @@
         width="300">
       </tb-table-column>
       <tb-table-column
-        fixed
         prop="zip"
         label="邮编"
         width="120">
@@ -202,6 +201,73 @@
         width="100">
         <template scope="scope">
           <div v-for="(item, index) in tableData4" class="item">
+            <span @click="handleClick(item, index)">查看</span>
+            <span @click="handleClick(item, index)">编辑</span>
+          </div>
+        </template>
+      </tb-table-column>
+    </tb-table2>
+
+    <h3>内容未超过时，固定头部和右侧</h3>
+    <tb-table2
+      :data="tableData2"
+      height="250"
+      border
+      style="width: 100%">
+      <tb-table-column
+        prop="date"
+        label="日期"
+        width="200">
+      </tb-table-column>
+      <tb-table-column
+        prop="name"
+        label="姓名"
+        width="200">
+      </tb-table-column>
+      <tb-table-column
+        prop="address"
+        label="地址"
+        width="300">
+      </tb-table-column>
+      <tb-table-column
+        label="操作"
+        fixed="right"
+        width="100">
+        <template scope="scope">
+          <div v-for="(item, index) in tableData2" class="item">
+            <span @click="handleClick(item, index)">查看</span>
+            <span @click="handleClick(item, index)">编辑</span>
+          </div>
+        </template>
+      </tb-table-column>
+    </tb-table2>
+
+    <h3>只固定右侧，不固定头部</h3>
+    <tb-table2
+      :data="tableData"
+      border
+      style="width: 100%">
+      <tb-table-column
+        prop="date"
+        label="日期"
+        width="200">
+      </tb-table-column>
+      <tb-table-column
+        prop="name"
+        label="姓名"
+        width="200">
+      </tb-table-column>
+      <tb-table-column
+        prop="address"
+        label="地址"
+        width="300">
+      </tb-table-column>
+      <tb-table-column
+        label="操作"
+        fixed="right"
+        width="100">
+        <template scope="scope">
+          <div v-for="(item, index) in tableData2" class="item">
             <span @click="handleClick(item, index)">查看</span>
             <span @click="handleClick(item, index)">编辑</span>
           </div>
@@ -308,7 +374,7 @@
               name: '王小虎',
               province: '上海',
               city: '普陀区',
-              address: '上海市普陀区金沙江路 1518 弄',
+              address: '上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄',
               zip: 200333
             }, 
             {
@@ -342,7 +408,7 @@
               name: '王小虎',
               province: '上海',
               city: '普陀区',
-              address: '上海市普陀区金沙江路 1518 弄',
+              address: '上海市普陀区金沙江路 上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄上海市普陀区金沙江路 1518 弄 弄',
               zip: 200333
             }, 
             {

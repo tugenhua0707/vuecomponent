@@ -36,6 +36,7 @@
           'overflow': height ? 'auto' : ''
         }">
         <tableBody
+          ref="tbodyWrapper"
           :data="data"
           :columns="tableColumns"
           :row-class-name="rowClassName"
@@ -153,15 +154,36 @@
         tableColumns: [],
         bodyHeight: '',
         columnswidth: [],
-        fixedColumnsLeft: [], // 保存最左侧列，比如 fixed 或 fixed='left'
-        fixedColumnsRight: [], // 保存最右侧列，比如 fixed = 'right'
-        fixedLeftWidth: 0, // 左侧固定列的宽度
-        fixedRightWidth: 0, // 右侧固定列的宽度
-        fixedHeight: 0, // 固定列的高度
-        fixedBodyHeight: 'auto', // 固定列的body的高度
-        isFixedLeftRight: false, // 是否固定左侧或右侧 通过该参数判断是否手动移动上去 是否变色
-        isRightCol:  false,      // 右侧操作是否固定 操作只能右侧固定，不能不固定或左侧固定(因为操作数据是定位上去的)
-        rightColWidth: '0',   // 右侧固定的宽度，默认为0
+
+        /* 保存最左侧列，比如 fixed 或 fixed='left' */
+        fixedColumnsLeft: [],
+
+        /* 保存最右侧列，比如 fixed = 'right' */
+        fixedColumnsRight: [],
+
+        /* 左侧固定列的宽度 */
+        fixedLeftWidth: 0,
+
+        /* 右侧固定列的宽度 */
+        fixedRightWidth: 0,
+
+        /* 固定列的高度 */
+        fixedHeight: 0,
+
+        /* 固定列的body的高度 */
+        fixedBodyHeight: 'auto',
+
+        /* 是否固定左侧或右侧 通过该参数判断是否手动移动上去 是否变色 */
+        isFixedLeftRight: false,
+
+        /* 右侧操作是否固定 操作只能右侧固定，不能不固定或左侧固定(因为操作数据是定位上去的) */
+        isRightCol: false,
+
+        /* 右侧固定的宽度，默认为0 */
+        rightColWidth: '0',
+
+        /* 保存操作固定列的字段 */
+        columnsElem: [],      
       }
     },
     beforeMount() {
@@ -172,9 +194,36 @@
       
     },
     mounted() {
+      var self = this;
       if (this.height) {
         this.getBodyHeight();
       }
+      var tableElem = this.$refs.bodyWrapper.children[0];
+      var tbodyElem = tableElem.children[1];
+      var trElems = tbodyElem.children;
+      var hiddenColumns = this.$refs.hiddenColumns;
+      var columnsChild = hiddenColumns.children;
+      for (var j = 0, jlen = columnsChild.length; j < jlen; j++) {
+        if (columnsChild[j].children && columnsChild[j].children.length) {
+          this.columnsElem = columnsChild[j].children;
+        }
+      }
+      // 对操作每一列动态设置元素的高度
+      for (var i = 0, ilen = trElems.length; i < ilen; i++) {
+        if (this.columnsElem[i]) {
+          this.columnsElem[i].style.height = trElems[i].offsetHeight + 'px';
+          this.columnsElem[i].style.lineHeight = trElems[i].offsetHeight + 'px';
+        }
+      }
+      this.$nextTick(function() {
+        // 判断是否有横向滚动条 tbody的宽度 > 外层table的宽度，说明内部的tbody的宽度超过 table的宽度，因此底部会有滚动条
+        if (self.$refs.tbodyWrapper.$el.offsetWidth > self.$refs.bodyWrapper.offsetWidth) {
+          self.fixedBodyHeight = self.$refs.bodyWrapper.offsetHeight - 14;
+        } else {
+          self.fixedBodyHeight = self.$refs.bodyWrapper.offsetHeight;
+        }
+        self.fixedHeight = self.fixedBodyHeight + 40;
+      });
     },
     methods: {
       // 获取table列表的字段
@@ -244,14 +293,6 @@
         // 对固定左侧的元素 进行重新排序
         var leftRightSort = function (arrs, type) {
           var tableColumns = self.tableColumns;
-          // 获取固定的高度
-          if (!self.height) {
-            // 如果没有固定头部的话，css已经写了每行的高度是40px，因此 总高度 = (多少行+头部的40px) * 40 - 1px(边框);
-            self.fixedHeight = (self.data.length + 1) * 40 - 1;
-          } else {
-            // 如果头部和列都固定的话， 那么它的高度 = 表格的高度 - 14(底部滚动条的高度) - 1px(边框)
-            self.fixedHeight = self.height - 14 - 1;
-          }
           if (type === 'left') {
             // 对左侧排序
             for (var j = arrs.length - 1; j >= 0; j--) {
@@ -290,13 +331,9 @@
         if (fixedColumnsRight.length > 0) {
           leftRightSort(fixedColumnsRight, 'right');
         }
-        // 固定列的body的高度 = table的总高度 - 头部的head的高度 - 1px边框 
-        self.fixedBodyHeight = self.fixedHeight - 40 - 1;
       },
       handleBodyScroll(event) {
-        if (this.fixedColumnsLeft.length || this.fixedColumnsRight.length) {
-          this.$refs.headWrapper.scrollLeft = event.target.scrollLeft;
-        }
+        this.$refs.headWrapper.scrollLeft = event.target.scrollLeft;
         if (this.fixedColumnsLeft.length) {
           this.$refs.fixedLeftBody.scrollTop = event.target.scrollTop;
         }

@@ -219,7 +219,9 @@ li {
   overflow: hidden;
 }
 .tb-table .hidden-columns .item {
-  height: 40px;
-  line-height: 40px;
   text-align: center;
+}
+.tb-table .hidden-columns .item span {
+  cursor: pointer;
+  color: #0a73c7;
 }
