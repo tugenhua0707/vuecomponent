@@ -228,11 +228,50 @@
       });
     },
     methods: {
+      typeOf: function(obj) {
+        const toString = Object.prototype.toString;
+        const map = {
+          '[object Boolean]': 'boolean',
+          '[object Number]': 'number',
+          '[object String]': 'string',
+          '[object Function]': 'function',
+          '[object Array]': 'array',
+          '[object Date]': 'date',
+          '[object RegExp]': 'regExp',
+          '[object Undefined]': 'undefined',
+          '[object Null]': 'null',
+          '[object Object]': 'object'
+        };
+        return map[toString.call(obj)];
+      },
+      deepCopy(data) {
+        const t = this.typeOf(data);
+        let o,
+          i;
+        if (t === 'array') {
+          o = [];
+        } else if (t === 'object') {
+          o = {};
+        } else {
+          return data;
+        }
+        if (t === 'array') {
+          for (let i = 0; i < data.length; i++) {
+            o.push(this.deepCopy(data[i]));
+          }
+        } else if (t === 'object') {
+          for (i in data) {
+            o[i] = this.deepCopy(data[i]);
+          }
+        }
+        return o;
+      },
       makeData() {
         var data = [];
         this.data.forEach((row, index) => {
-          row._index = index;
-          data[index] = row;
+          const newRow = this.deepCopy(row);
+          newRow._index = index;
+          data[index] = newRow;
         });
         return data;
       },
