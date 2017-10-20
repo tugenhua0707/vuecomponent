@@ -142,13 +142,14 @@
       <tb-table-column
         prop="zip"
         label="邮编"
+        fixed="right"
         width="120">
       </tb-table-column>
       <tb-table-column
         label="操作"
         fixed="right"
         width="100">
-        <template scope="scope">
+        <template>
           <div v-for="(item, index) in tableData3" class="item">
             <span @click="handleClick(item, index)">查看</span>
             <span @click="handleClick(item, index)">编辑</span>
@@ -192,14 +193,13 @@
       <tb-table-column
         prop="zip"
         label="邮编"
-        fixed="right"
         width="120">
       </tb-table-column>
       <tb-table-column
         label="操作"
         fixed="right"
         width="100">
-        <template scope="scope">
+        <template>
           <div v-for="(item, index) in tableData4" class="item">
             <span @click="handleClick(item, index)">查看</span>
             <span @click="handleClick(item, index)">编辑</span>
@@ -233,7 +233,7 @@
         label="操作"
         fixed="right"
         width="100">
-        <template scope="scope">
+        <template>
           <div v-for="(item, index) in tableData2" class="item">
             <span @click="handleClick(item, index)">查看</span>
             <span @click="handleClick(item, index)">编辑</span>
@@ -266,7 +266,7 @@
         label="操作"
         fixed="right"
         width="100">
-        <template scope="scope">
+        <template>
           <div v-for="(item, index) in tableData2" class="item">
             <span @click="handleClick(item, index)">查看</span>
           </div>

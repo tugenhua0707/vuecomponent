@@ -19,6 +19,7 @@ import BackTop from './components/back-top/back-top.vue';
 import Table from './components/table/table.vue';
 import Table2 from './components/table2/table.vue';
 import TableColumn from './components/table-column/table-column.vue';
+import RightMenu from './components/right-menu/right-menu.vue';
 // import DropDown from './components/dropdown/dropdown.vue';
 /* import DropDownItem from './components/dropdown/dropdown-item.vue';
 import DropDownMenu from './components/dropdown/dropdown-menu.vue'; */
@@ -44,6 +45,7 @@ const iview = {
   'tb-table': Table,
   'tb-table2': Table2,
   'tb-table-column': TableColumn,
+  'tb-right-menu': RightMenu,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu
@@ -80,6 +82,7 @@ export default {
   'tb-table': Table,
   'tb-table2': Table2,
   'tb-table-column': TableColumn,
+  'tb-right-menu': RightMenu,
   // 'tb-dropdown': DropDown,
   // 'tb-dropdown-item': DropDownItem,
   // 'tb-dropdown-menu': DropDownMenu

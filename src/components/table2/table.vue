@@ -114,7 +114,7 @@
     <div 
       class="tb-table-fixed-right-patch" 
       v-if="height > 0"
-      :style="{width: '13px', height: '40px'}">
+      :style="{width: '14px', height: '40px'}">
     </div>
   </div>
 </template>

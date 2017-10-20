@@ -31,6 +31,7 @@ import switchable from './views/switchable/switchable.vue';
 import backtop from './views/back-top/back-top.vue';
 import table from './views/table/table.vue';
 import table2 from './views/table2/table2.vue';
+import rightmenu from './views/right-menu/right-menu.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -150,6 +151,10 @@ export default new Router({
     {
       path: '/table2',
       component: table2
+    },
+    {
+      path: '/rightmenu',
+      component: rightmenu
     }
   ]
 })
