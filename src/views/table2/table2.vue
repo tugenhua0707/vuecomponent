@@ -113,6 +113,7 @@
     <tb-table2
       :data="tableData3"
       border
+      :opera="opera"
       style="width: 100%">
       <tb-table-column
         prop="date"
@@ -149,12 +150,6 @@
         label="操作"
         fixed="right"
         width="100">
-        <template>
-          <div v-for="(item, index) in tableData3" class="item">
-            <span @click="handleClick(item, index)">查看</span>
-            <span @click="handleClick(item, index)">编辑</span>
-          </div>
-        </template>
       </tb-table-column>
     </tb-table2>
 
@@ -162,6 +157,7 @@
     <tb-table2
       :data="tableData4"
       border
+      :opera="opera"
       height="250"
       style="width: 100%">
       <tb-table-column
@@ -199,12 +195,6 @@
         label="操作"
         fixed="right"
         width="100">
-        <template>
-          <div v-for="(item, index) in tableData4" class="item">
-            <span @click="handleClick(item, index)">查看</span>
-            <span @click="handleClick(item, index)">编辑</span>
-          </div>
-        </template>
       </tb-table-column>
     </tb-table2>
 
@@ -213,6 +203,7 @@
       :data="tableData2"
       height="250"
       border
+      :opera="opera"
       style="width: 100%">
       <tb-table-column
         prop="date"
@@ -233,12 +224,6 @@
         label="操作"
         fixed="right"
         width="100">
-        <template>
-          <div v-for="(item, index) in tableData2" class="item">
-            <span @click="handleClick(item, index)">查看</span>
-            <span @click="handleClick(item, index)">编辑</span>
-          </div>
-        </template>
       </tb-table-column>
     </tb-table2>
 
@@ -246,6 +231,7 @@
     <tb-table2
       :data="tableData"
       border
+      :opera="opera"
       style="width: 100%">
       <tb-table-column
         prop="date"
@@ -266,11 +252,6 @@
         label="操作"
         fixed="right"
         width="100">
-        <template>
-          <div v-for="(item, index) in tableData2" class="item">
-            <span @click="handleClick(item, index)">查看</span>
-          </div>
-        </template>
       </tb-table-column>
     </tb-table2>
   </div>
@@ -458,7 +439,8 @@
               address: '上海市普陀区金沙江路 1518 弄',
               zip: 200333
             }
-          ]
+          ],
+          opera: '<span @click="clickFunc($event)">查看</span><span @click="clickFunc($event)">编辑</span>'
         }
       },
       methods: {
@@ -472,6 +454,11 @@
         },
         handleClick(item, index) {
           console.log(item);
+          console.log(index);
+        },
+        clickFunc (e) {
+          console.log(e.target);
+          var index = e.target.parentNode.parentNode.getAttribute('data-index');
           console.log(index);
         }
       }

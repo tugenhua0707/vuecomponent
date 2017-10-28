@@ -1,28 +1,27 @@
-
 <template> 
   <table cellpadding="0" cellspacing="0" width="100%" class="tb-table-head">
     <colgroup>
-      <col v-if="columnsWidth.length > 0" v-for="w in columnsWidth" :width="(w-1)"></col>
-      <col v-for="item in columns" :width="(item.width-1)" v-if="columnsWidth.length == 0"></col>
+      <col v-if="columnsWidth.length > 0" v-for="w in columnsWidth" :width="w"></col>
+      <col v-for="item in columns" :width="item.width" v-if="columnsWidth.length == 0"></col>
     </colgroup>
     <thead>
       <tr>
         <th v-for="item in columns">
           <div class="cell">{{item.label}}</div>
         </th>
-        <th width="14" v-if="fixedHead"></th>
+        <th v-if="fixedHead && levelscroll" :style="{
+          width: scrollWidthHeight + 'px',
+          padding: 0
+        }"></th>
       </tr>
     </thead>
   </table>
-
 </template>
-
 <script>
   import Emitter from '../../mixins/emitter';
-  let arrs = [];
   export default {
     name: 'TbTableHead',
-    mixins: [ Emitter ],
+    mixins: [Emitter],
     props: {
       columns: {
         type: [Array, Object],
@@ -32,30 +31,8 @@
       columnsWidth: {
         type: Array
       },
-    },
-    data() {
-      return {
-
-      }
-    },
-    beforeCreate() {
-      
-    },
-    
-    created() {
-      
-    },
-    computed: {
-
-    },
-    mounted() {
-      
-    },
-    beforeMount() {
-      
-    },
-    methods: {
-      
+      levelscroll: Boolean,
+      scrollWidthHeight: [Number, String]
     }
   }
 </script>

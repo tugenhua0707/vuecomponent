@@ -1,9 +1,8 @@
-
 <template>
   <table cellspacing="0" cellpadding="0" width="100%" class="tb-table-body">
     <colgroup>
-      <col v-if="columnsWidth.length > 0" v-for="w in columnsWidth" :width="(w-1)"></col>
-      <col v-for="item in columns" :width="(item.width - 1)" v-if="columnsWidth.length == 0"></col>
+      <col v-if="columnsWidth.length > 0" v-for="w in columnsWidth" :width="w"></col>
+      <col v-for="item in columns" :width="item.width" v-if="columnsWidth.length == 0"></col>
     </colgroup>
     <tbody>
       <tr 
@@ -18,13 +17,21 @@
             'bgColor': data[index] && data[index].isHover
           }"
         >
-          <cellData :row="row" :column="column"></cellData>
+          <cellData :row="row" :column="column" :opera="opera" :is-last-cell="(_index === (columns.length - 1)) ? true : false"></cellData>
         </td>
+      </tr>
+      <tr v-if="isAddTrElem && fixedHead && levelscroll">
+        <td 
+          :colspan="columns.length" 
+          :style="{
+            height: scrollWidthHeight + 'px',
+            padding: 0
+          }"
+        ></td>
       </tr>
     </tbody>
   </table>
 </template>
-
 <script>
   import Emitter from '../../mixins/emitter';
   import cellData from './cell-data.vue';
@@ -41,13 +48,14 @@
         type: [Array, Object],
         required: true
       },
-      stripe: {
-        type: Boolean,
-        default: false
-      },
       rowClassName: [String, Function],
       columnsWidth: Array,
-      isFixedLeftRight: Boolean
+      isFixedLeftRight: Boolean,
+      levelscroll: Boolean,
+      fixedHead: String,
+      scrollWidthHeight: [String, Number],
+      isAddTrElem: Boolean,
+      opera: String
     },
     data() {
       return {
@@ -80,7 +88,6 @@
       }
     },
     mounted () {
-
     }
   }
 </script>

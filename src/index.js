@@ -21,6 +21,7 @@ import './assets/styles/switchable.css';
 import './assets/styles/backtop.css';
 import './assets/styles/table.css';
 import './assets/styles/right-menu.css';
+
 import iView from './main';
 
 Vue.use(iView);

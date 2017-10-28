@@ -1,47 +1,46 @@
-
 <template>
   <div 
     class="tb-table tb-table-bottom-none"
     :class="{
       'tb-table-border': border,
       'tb-table-stripe': stripe,
+      'tb-table-hover': hover,
       'tb-table-fixed-head': height || fixedColumnsLeft.length > 0 || fixedColumnsRight > 0
     }"
-  >
-    <div 
-      class="hidden-columns" 
-      ref="hiddenColumns"
-      :style="{
-        width: rightColWidth + 'px',
-        height: fixedBodyHeight + 'px',
-        visibility: isRightCol ? 'visible' : 'hidden',
-        zIndex: isRightCol ? '10' : '-1',
-        right: height > 0 ? '14px' : '0'
-      }"
-    ><slot></slot></div>
+    ref="tbTable">
     <div>
-      <div class="tb-table-head-wrapper" ref="headWrapper">
+      <div 
+        class="tb-table-head-wrapper" 
+        ref="headWrapper"
+      >
         <tableHead
           :columns="tableColumns"
           :fixed-head="height"
+          :scroll-width-height="scrollWidthHeight"
+          :levelscroll="isLevelScroll"
           :columns-width="columnswidth">
         </tableHead>
       </div>
       <div 
         class="tb-table-body-wrapper" 
-        ref="bodyWrapper" 
+        ref="bodyWrapper"
         @scroll="handleBodyScroll"
         :style="{
-          height: bodyHeight,
-          'overflow': height ? 'auto' : ''
-        }">
+          height: height ? (height + 'px') : 'auto',
+          'overflow-x': isLevelScroll ? 'auto' : 'hidden'
+        }"
+      >
         <tableBody
           ref="tbodyWrapper"
           :data="objData"
           :columns="tableColumns"
           :row-class-name="rowClassName"
+          :fixed-head="height"
+          :levelscroll="isLevelScroll"
+          :scroll-width-height="scrollWidthHeight"
           :columns-width="columnswidth"
-          :isFixedLeftRight="isFixedLeftRight"
+          :opera="opera"
+          :is-fixed-left-right="isFixedLeftRight"
         >
         </tableBody>
       </div>
@@ -51,27 +50,34 @@
       v-if="fixedColumnsLeft.length > 0" 
       :style="{
         width: fixedLeftWidth + 'px',
-        height: fixedHeight + 'px'
-      }">
-      <div class="tb-table-fixed-head-wrapper">
+        height: fixedHeight + 'px'}">
+      <div 
+        class="tb-table-fixed-head-wrapper"
+        :style="{
+          right: (height && isLevelScroll) ? (-scrollWidthHeight + 'px') : 0}">
         <tableHead
           :columns="tableColumns"
           :fixed-head="height"
+          :scroll-width-height="scrollWidthHeight"
+          :levelscroll="isLevelScroll"
           :columns-width="columnswidth">
         </tableHead>
       </div>
       <div 
         class="tb-table-fixed-body-wrapper" 
         ref="fixedLeftBody"
-        :style="{height: fixedBodyHeight + 'px'}"
-      >
+        :style="{height: fixedBodyHeight + 'px'}">
         <tableBody
           :data="objData"
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
-          :isFixedLeftRight="isFixedLeftRight"
-        >
+          :levelscroll="isLevelScroll"
+          :fixed-head="height"
+          :is-add-tr-elem="isAddTrElem"
+          :opera="opera"
+          :scroll-width-height="scrollWidthHeight"
+          :is-fixed-left-right="isFixedLeftRight">
         </tableBody>
       </div>
     </div>
@@ -79,46 +85,46 @@
       class="tb-table-fixed-col-right" 
       v-if="fixedColumnsRight.length > 0"
       :style="{
-        width: fixedRightWidth + 'px',
+        width: (fixedRightWidth - 2) + 'px',
         height: fixedHeight + 'px',
-        right: (fixedColumnsRight.length > 0 && height > 0) ? '14px' : 0
-      }"
-    >
-      <div 
-        class="tb-table-fixed-head-wrapper"
-        :style="{
-          right: (fixedColumnsRight.length > 0 && height > 0) ? '-14px' : 0
-        }"
-      >
+        right: height && fixedColumnsRight.length > 0 ? (scrollWidthHeight + 'px') : 0
+      }">
+      <div class="tb-table-fixed-head-wrapper" 
+           :style="{right: (height && isLevelScroll) ? (-scrollWidthHeight + 'px') : 0}">
         <tableHead
           :columns="tableColumns"
           :fixed-head="height"
+          :scroll-width-height="scrollWidthHeight"
+          :levelscroll="isLevelScroll"
           :columns-width="columnswidth">
         </tableHead>
       </div>
       <div 
         class="tb-table-fixed-body-wrapper" 
         ref="fixedRightBody"
-        :style="{height: fixedBodyHeight + 'px'}"
-      >
+        :style="{height: fixedBodyHeight + 'px'}">
         <tableBody
           :data="objData"
           :columns="tableColumns"
           :row-class-name="rowClassName"
           :columns-width="columnswidth"
-          :isFixedLeftRight="isFixedLeftRight"
-        >
+          :scroll-width-height="scrollWidthHeight"
+          :levelscroll="isLevelScroll"
+          :fixed-head="height"
+          :is-add-tr-elem="isAddTrElem"
+          :opera="opera"
+          :is-fixed-left-right="isFixedLeftRight">
         </tableBody>
       </div>
     </div>
-    <div 
-      class="tb-table-fixed-right-patch" 
-      v-if="height > 0"
-      :style="{width: '14px', height: '40px'}">
+    <div v-if="height" class="tb-table-fixed-right-patch" 
+      :style="{
+        width: scrollWidthHeight + 'px',
+        height: '39px'
+      }"></div>
     </div>
   </div>
 </template>
-
 <script>
   import Emitter from '../../mixins/emitter';
   import tableBody from './table-body.vue';
@@ -127,104 +133,92 @@
     name: 'TbTable',
     componentName: 'TbTable',
     mixins: [Emitter],
-    components: { tableBody, tableHead },
+    components: {
+      tableBody,
+      tableHead
+    },
     props: {
       data: {
         type: Array,
         required: true
       },
-      // 间隔变色
+      hover: {
+        type: Boolean,
+        default: false
+      },
       stripe: {
         type: Boolean,
         default: false
       },
-      // 带有边框
       border: {
         type: Boolean,
         default: false
       },
       // 带状态的表格
       rowClassName: [String, Function],
-
       // 固定表头而设置
-      height: [String, Number]
+      height: [String, Number],
+      // 操作字段
+      opera: {
+        type: String,
+        default: ''
+      }
     },
     data() {
       return {
         tableColumns: [],
-        bodyHeight: '',
         columnswidth: [],
-
         /* 保存最左侧列，比如 fixed 或 fixed='left' */
         fixedColumnsLeft: [],
-
         /* 保存最右侧列，比如 fixed = 'right' */
         fixedColumnsRight: [],
-
         /* 左侧固定列的宽度 */
         fixedLeftWidth: 0,
-
         /* 右侧固定列的宽度 */
         fixedRightWidth: 0,
-
         /* 固定列的高度 */
         fixedHeight: 0,
-
         /* 固定列的body的高度 */
         fixedBodyHeight: 'auto',
-
         /* 是否固定左侧或右侧 通过该参数判断是否手动移动上去 是否变色 */
         isFixedLeftRight: false,
-
         /* 右侧操作是否固定 操作只能右侧固定，不能不固定或左侧固定(因为操作数据是定位上去的) */
         isRightCol: false,
-
         /* 右侧固定的宽度，默认为0 */
         rightColWidth: '0',
-
         /* 保存操作固定列的字段 */
-        columnsElem: [],  
+        columnsElem: [],
+        objData: this.makeData(),
 
-        objData: this.makeData()    
+        // 是否有横向滚动条
+        isLevelScroll: false,
+
+        // 滚动条的宽度 或高度
+        scrollWidthHeight: 0,
+
+        // 判断左侧或右侧 添加 tr 元素
+        isAddTrElem: true
       }
     },
     beforeMount() {
       // 获取table列表的字段名称
       this.getListColumns();
     },
-    computed: {
-      
-    },
     mounted() {
       var self = this;
-      if (this.height) {
-        this.getBodyHeight();
-      }
-      var tableElem = this.$refs.bodyWrapper.children[0];
-      var tbodyElem = tableElem.children[1];
-      var trElems = tbodyElem.children;
-      var hiddenColumns = this.$refs.hiddenColumns;
-      var columnsChild = hiddenColumns.children;
-      for (var j = 0, jlen = columnsChild.length; j < jlen; j++) {
-        if (columnsChild[j].children && columnsChild[j].children.length) {
-          this.columnsElem = columnsChild[j].children;
-        }
-      }
-      // 对操作每一列动态设置元素的高度
-      for (var i = 0, ilen = trElems.length; i < ilen; i++) {
-        if (this.columnsElem[i]) {
-          this.columnsElem[i].style.height = trElems[i].offsetHeight + 'px';
-          this.columnsElem[i].style.lineHeight = trElems[i].offsetHeight + 'px';
-        }
-      }
       this.$nextTick(function() {
-        // 判断是否有横向滚动条 tbody的宽度 > 外层table的宽度，说明内部的tbody的宽度超过 table的宽度，因此底部会有滚动条
-        if (self.$refs.tbodyWrapper.$el.offsetWidth > self.$refs.bodyWrapper.offsetWidth) {
-          self.fixedBodyHeight = self.$refs.bodyWrapper.offsetHeight - 14;
+        // 如果table的宽度大于 最外层的宽度的话，说明是横向滚动
+        if (self.$refs.bodyWrapper.children[0].offsetWidth > self.$refs.tbTable.offsetWidth) {
+          self.isLevelScroll = true;
         } else {
-          self.fixedBodyHeight = self.$refs.bodyWrapper.offsetHeight;
+          self.isLevelScroll = false;
         }
-        self.fixedHeight = self.fixedBodyHeight + 40;
+
+        // 计算滚动条的默认宽度 简单的判断下 
+        self.scrollWidthHeight = self.$refs.bodyWrapper.offsetWidth - self.$refs.bodyWrapper.clientWidth;
+
+        self.fixedBodyHeight = this.$refs.bodyWrapper.clientHeight;
+        self.fixedHeight = self.fixedBodyHeight + 39;
       });
     },
     methods: {
@@ -304,26 +298,6 @@
           this.fixedColSort();
           this.isFixedLeftRight = true;
         }
-        // 固定头部
-        this.fixedHead(widthArrs);
-      },
-      getBodyHeight() {
-        // 总高度 - 头部的高度 - 1(低边框为1px)
-        this.bodyHeight = this.height - this.$refs.headWrapper.offsetHeight - 1 + 'px';
-      },
-      // 固定头部
-      fixedHead(widthArrs) {
-        if (this.height) {
-          // 获取数组里面最大值
-          var maxValue = Math.max.apply(null, widthArrs);
-          // 获取数组最大值的索引
-          var maxIndex = widthArrs.indexOf(maxValue.toString());
-          // 最大值的宽度 需要减去 15， 因为需要包括纵向滚动条的宽度
-          var resetMaxValue = maxValue * 1 - 15 - 1;
-          // 最后重新设置数组的宽度
-          widthArrs[maxIndex] = resetMaxValue.toString();
-          this.columnswidth = widthArrs;
-        }
       },
       fixedColSort() {
         var self = this;
@@ -380,13 +354,13 @@
         }
       },
       handleBodyScroll(event) {
+        var scrollTop = event.target.scrollTop;
         this.$refs.headWrapper.scrollLeft = event.target.scrollLeft;
         if (this.fixedColumnsLeft.length) {
-          this.$refs.fixedLeftBody.scrollTop = event.target.scrollTop;
+          this.$refs.fixedLeftBody.scrollTop = scrollTop;
         }
         if (this.fixedColumnsRight.length) {
-          this.$refs.fixedRightBody.scrollTop = event.target.scrollTop;
-          this.$refs.hiddenColumns.scrollTop = event.target.scrollTop;
+          this.$refs.fixedRightBody.scrollTop = scrollTop;
         }
       },
       handleMouseIn(index) {

@@ -1,4 +1,3 @@
-
 <template>
   <li :class="classes" @click.stop="select" ref="options" v-show="isMatch">
     <slot>{{ showLabel }}</slot>
@@ -8,7 +7,6 @@
 <script>
   import Emitter from '../../mixins/emitter';
   const prefixCls = "tb-select2-item";
-
   export default {
     name: 'TbSelect2Option',
     mixins: [ Emitter ],

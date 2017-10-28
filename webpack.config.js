@@ -65,7 +65,12 @@ module.exports = {
   resolve: {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
-    }
+    },
+    extensions: ['.js', '.vue', '.styl'],
+    modules: [
+      path.join(__dirname, './src'),
+      'node_modules'
+    ]
   },
   devServer: {
     historyApiFallback: true,  // 不跳转
